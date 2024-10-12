@@ -1,44 +1,33 @@
-import { FC } from 'react';
-import {
-  Panel,
-  PanelHeader,
-  Header,
-  Button,
-  Group,
-  Cell,
-  Div,
-  Avatar,
-  NavIdProps,
-} from '@vkontakte/vkui';
-import { UserInfo } from '@vkontakte/vk-bridge';
-import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
+import { FC, useState } from "react";
+import { Panel, NavIdProps } from "@vkontakte/vkui";
+import { UserInfo } from "@vkontakte/vk-bridge";
+import { PanelTabs, ProfilePreview } from "../components";
+import { HOME_PANELS } from "../routes";
+import { Tasks } from "./Tasks";
+import { Shop } from "./Shop";
+import { Leaderboard } from "./Leaderboard";
 
 export interface HomeProps extends NavIdProps {
   fetchedUser?: UserInfo;
 }
 
 export const Home: FC<HomeProps> = ({ id, fetchedUser }) => {
-  const { photo_200, city, first_name, last_name } = { ...fetchedUser };
-  const routeNavigator = useRouteNavigator();
+  console.log(fetchedUser);
+  const [selected, setSelected] = useState<string>(
+    HOME_PANELS.TASKS
+  );
 
   return (
     <Panel id={id}>
-      <PanelHeader>Главная</PanelHeader>
-      {fetchedUser && (
-        <Group header={<Header mode="secondary">User Data Fetched with VK Bridge</Header>}>
-          <Cell before={photo_200 && <Avatar src={photo_200} />} subtitle={city?.title}>
-            {`${first_name} ${last_name}`}
-          </Cell>
-        </Group>
-      )}
-
-      <Group header={<Header mode="secondary">Navigation Example</Header>}>
-        <Div>
-          <Button stretched size="l" mode="secondary" onClick={() => routeNavigator.push('persik')}>
-            Покажите Персика, пожалуйста!
-          </Button>
-        </Div>
-      </Group>
+      <div
+        style={{ padding: "28px 24px", paddingBottom: "16px" }}
+      >
+        <ProfilePreview />
+      </div>
+      <PanelTabs selected={selected} setSelected={setSelected} />
+      {selected === HOME_PANELS.TASKS && <Tasks />}
+      {selected === HOME_PANELS.SHOP && <Shop />}
+      {selected === HOME_PANELS.LEADERBOARD && <Leaderboard />}
     </Panel>
   );
 };
