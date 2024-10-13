@@ -12,6 +12,29 @@ type ShopItemPropsT = {
   item: ShopItemT;
 };
 
+const imgs = [
+  "/items/merch-1.png",
+  "/items/merch-2.png",
+  "/items/merch-3.png",
+  "/items/merch-4.png",
+  "/items/merch-5.png",
+  "/items/merch-6.png",
+  "/items/merch-7.png",
+  "/items/merch-8.png",
+  "/items/merch-9.png",
+  "/items/merch-10.png",
+  "/items/merch-11.png",
+  "/items/merch-12.png",
+  "/items/merch-13.png",
+  "/items/merch-14.png",
+  "/items/merch-15.png",
+  "/items/border-1.png",
+  "/items/border-2.png",
+  "/items/border-3.png",
+  "/items/border-4.png",
+  "/items/border-5.png",
+];
+
 export const ShopItem: FC<ShopItemPropsT> = ({ item }) => {
   const [{ access_token }] = useCookies(["access_token"]);
 
@@ -22,7 +45,7 @@ export const ShopItem: FC<ShopItemPropsT> = ({ item }) => {
   });
   const user = (userData || {}) as UserT;
   const percent = (user?.tokens || 0) / item.price;
-  const imgSrc = item.name + ".png";
+  const imgSrc = imgs[item.id % imgs.length];
 
   const screenWidth = useGetScreenWidth();
   const cardSize = screenWidth
@@ -72,7 +95,11 @@ export const ShopItem: FC<ShopItemPropsT> = ({ item }) => {
           }}
         ></div>
       </div>
-      <img src={imgSrc} alt={item.name} />
+      <img
+        src={imgSrc}
+        alt={item.name}
+        style={{ width: "100%", height: "100%" }}
+      />
     </Card>
   );
 };

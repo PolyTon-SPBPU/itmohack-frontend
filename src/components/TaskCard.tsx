@@ -13,7 +13,7 @@ export const TaskCard: FC<TaskCardPropsT> = ({ task }) => {
   const navigator = useRouteNavigator();
 
   const handleClick = () => {
-    navigator.push("/task");
+    navigator.push("/task?task_id=" + task.id);
   };
 
   return (

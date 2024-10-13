@@ -7,8 +7,11 @@ import { MODAL } from "../routes";
 import bridge from "@vkontakte/vk-bridge";
 import { useMutation } from "@tanstack/react-query";
 import { ErrorAlert } from "../components";
+import { UserInfo } from "@vkontakte/vk-bridge";
 
-export const RegisterModal: FC = () => {
+export const RegisterModal: FC<{ user: UserInfo }> = ({
+  user,
+}) => {
   const navigator = useRouteNavigator();
   const [pinCode, setPinCode] = useState<string>("");
 
@@ -43,11 +46,9 @@ export const RegisterModal: FC = () => {
   return (
     <Group>
       <Text size={18} weight={700} mb={8}>
-        Привет, Илья!
+        Привет, {user.first_name}!
       </Text>
-      <Text mb={16}>
-        Введи надежный пин-код для доступа к приложению
-      </Text>
+      <Text mb={16}>Придумай надежный пин-код</Text>
       <Input
         type="password"
         style={{ marginBottom: "24px" }}

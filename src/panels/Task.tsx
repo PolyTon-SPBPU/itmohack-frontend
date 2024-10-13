@@ -20,12 +20,10 @@ import { httpService } from "../services/http.service";
 import { Button } from "@vkontakte/vkui";
 
 export const Task: FC<NavIdProps> = ({ id }) => {
-  const { user_id, task_id } = useParams<
-    "user_id" | "task_id"
-  >();
-  console.log(user_id, task_id);
-  const navigator = useRouteNavigator();
   const [{ access_token }] = useCookies(["access_token"]);
+  const { task_id } = useParams<"task_id">();
+
+  const navigator = useRouteNavigator();
   const { data } = useQuery<TaskT>({
     queryKey: ["task"],
     queryFn: () => httpService(access_token).get("/task"),
@@ -76,6 +74,11 @@ export const Task: FC<NavIdProps> = ({ id }) => {
           />
         </Flex>
       </div>
+      <a
+        href={`https://polytones.online/ar/first/?access_token=${access_token}&task_id=${task_id}`}
+      >
+        <Text>Нажми, чтобы получить награду</Text>
+      </a>
       <Button size="m">Проверить выполнение</Button>
     </Panel>
   );

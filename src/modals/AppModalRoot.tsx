@@ -28,7 +28,7 @@ export const AppModalRoot: FC<{ user: UserInfo }> = ({
         <LoginModal user={user} />
       </ModalCard>
       <ModalCard id={MODAL.REGISTER}>
-        <RegisterModal />
+        <RegisterModal user={user} />
       </ModalCard>
       <ModalCard id={MODAL.PROFILE_ITEM}>
         <ProfileItemModal />
