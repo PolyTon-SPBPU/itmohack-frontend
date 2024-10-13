@@ -1,6 +1,6 @@
 import { FC } from "react";
 
-import { Card, Avatar } from "@vkontakte/vkui";
+import { Card } from "@vkontakte/vkui";
 import { Text } from "../ui";
 import { UserT, LeaderboardUserT } from "../types";
 import { Currency } from "../ui/Currency";
@@ -33,7 +33,7 @@ export const LeaderboardCard: FC<LeaderboardCardPropsT> = ({
       <Text weight={700} style={{ marginRight: "8px" }}>
         {place}.
       </Text>
-      <Avatar src="/avatar.png" size={32} />
+      {/* <Avatar src="/avatar.png" size={32} /> */}
       <Text>
         {user.first_name} {user.last_name}
       </Text>

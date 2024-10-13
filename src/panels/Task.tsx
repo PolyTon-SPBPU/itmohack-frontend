@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useMemo } from "react";
 import QRCode from "react-qr-code";
 import {
   NavIdProps,
@@ -19,8 +19,12 @@ import { useCookies } from "react-cookie";
 import { useQuery } from "@tanstack/react-query";
 import { httpService } from "../services/http.service";
 import { Button } from "@vkontakte/vkui";
+import { UserInfo } from "@vkontakte/vk-bridge";
 
-export const Task: FC<NavIdProps> = ({ id }) => {
+export const Task: FC<NavIdProps & { user: UserInfo }> = ({
+  user,
+  id,
+}) => {
   const [{ access_token }] = useCookies(["access_token"]);
   const [params] = useSearchParams();
   const task_id = params.get("task_id");
@@ -32,7 +36,7 @@ export const Task: FC<NavIdProps> = ({ id }) => {
       httpService(access_token).get("/task/" + task_id),
   });
 
-  const task = (data || {}) as TaskT;
+  const task = useMemo(() => data || {}, [data]) as TaskT;
 
   return (
     <Panel id={id}>
@@ -69,9 +73,7 @@ export const Task: FC<NavIdProps> = ({ id }) => {
         <Flex justify="center">
           <QRCode
             value={JSON.stringify({
-              access_token:
-                access_token ||
-                localStorage.getItem("access_token"),
+              user_id: user.id,
               task_id,
             })}
             style={{
@@ -80,15 +82,26 @@ export const Task: FC<NavIdProps> = ({ id }) => {
             }}
           />
         </Flex>
-        <a
-          href={`https://polytones.online/ar/first/?access_token=${access_token}&task_id=${task_id}`}
-          style={{ marginBottom: "8px" }}
+        <Flex
+          justify="center"
+          align="center"
+          style={{ columnGap: "8px", rowGap: "8px" }}
         >
-          <Button size="m">Нажми, чтобы получить награду</Button>
-        </a>
-        <Button mode="secondary" size="m">
-          Проверить выполнение
-        </Button>
+          <a
+            href={`https://polytones.online/ar/first/?access_token=${
+              access_token ||
+              localStorage.getItem("access_token")
+            }&task_id=${task_id}`}
+            style={{ marginBottom: "8px" }}
+          >
+            <Button size="m">
+              Нажми, чтобы получить награду
+            </Button>
+          </a>
+          <Button mode="secondary" size="m">
+            Проверить выполнение
+          </Button>
+        </Flex>
       </div>
     </Panel>
   );

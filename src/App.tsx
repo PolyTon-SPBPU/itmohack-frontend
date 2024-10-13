@@ -62,7 +62,7 @@ export const App = () => {
     >
       <SplitCol>
         <View activePanel={activePanel}>
-          <Task id="task" />
+          <Task user={user} id="task" />
           <Profile id="profile" />
           <Home id="home" />
         </View>
