@@ -62,7 +62,7 @@ export const LoginModal: FC<{ user: UserInfo }> = ({ user }) => {
         first_name: user.first_name,
         last_name: user.last_name,
         access_token: data.access_token,
-        birthday: "07.06.2006",
+        birthday: "2006-06-07",
       });
       navigator.hideModal();
     } catch (err) {
