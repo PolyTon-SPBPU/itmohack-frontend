@@ -1,4 +1,5 @@
-import { FC, useMemo, useState } from "react";
+import { FC } from "react";
+import QRCode from "react-qr-code";
 import {
   NavIdProps,
   Panel,
@@ -23,7 +24,6 @@ export const Task: FC<NavIdProps> = ({ id }) => {
   const [{ access_token }] = useCookies(["access_token"]);
   const [params] = useSearchParams();
   const task_id = params.get("task_id");
-  const [qrSrc, setQrSrc] = useState<string | null>(null);
 
   const navigator = useRouteNavigator();
   const { data } = useQuery<TaskT>({
@@ -31,18 +31,6 @@ export const Task: FC<NavIdProps> = ({ id }) => {
     queryFn: () =>
       httpService(access_token).get("/task/" + task_id),
   });
-  const { data: qrData } = useQuery<File>({
-    queryKey: ["qr"],
-    queryFn: () =>
-      httpService(access_token).get("/task/" + task_id + "/qr"),
-  });
-
-  useMemo(() => {
-    if (!qrData) return {};
-    const reader = new FileReader();
-    reader.readAsDataURL(qrData);
-    reader.onload = () => setQrSrc(reader.result as string);
-  }, [qrData]);
 
   const task = (data || {}) as TaskT;
 
@@ -79,16 +67,18 @@ export const Task: FC<NavIdProps> = ({ id }) => {
           {task.text}
         </Text>
         <Flex justify="center">
-          {qrData && (
-            <img
-              src={`data:image/jpg;base64 ${qrSrc}`}
-              alt="Изображение не найдено"
-              style={{
-                maxWidth: "245px",
-                display: "block",
-              }}
-            />
-          )}
+          <QRCode
+            value={JSON.stringify({
+              access_token:
+                access_token ||
+                localStorage.getItem("access_token"),
+              task_id,
+            })}
+            style={{
+              maxWidth: "245px",
+              display: "block",
+            }}
+          />
         </Flex>
         <a
           href={`https://polytones.online/ar/first/?access_token=${access_token}&task_id=${task_id}`}

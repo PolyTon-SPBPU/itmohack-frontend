@@ -23,6 +23,7 @@ export const ShopItem: FC<ShopItemPropsT> = ({ item }) => {
     queryFn: () =>
       httpService(access_token).get("/auth/user/me"),
   });
+
   const user = (userData || {}) as UserT;
   const percent = (user?.tokens || 0) / item.price;
   const imgSrc =
@@ -36,9 +37,9 @@ export const ShopItem: FC<ShopItemPropsT> = ({ item }) => {
     : 0;
 
   const handleClick = () => {
-    navigator.push("/" + MODAL.SHOP_ITEM, {
-      item_id: item.id + "",
-    });
+    navigator.push(
+      "/" + MODAL.SHOP_ITEM + "?item_id=" + item.id
+    );
   };
 
   return (

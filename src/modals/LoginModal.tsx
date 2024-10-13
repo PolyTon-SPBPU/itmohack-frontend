@@ -58,6 +58,7 @@ export const LoginModal: FC<{ user: UserInfo }> = ({ user }) => {
     try {
       const { data } = await login(submitData);
       setCookies("access_token", data.access_token);
+      localStorage.setItem("access_token", data.access_token);
       await patchUser({
         first_name: user.first_name,
         last_name: user.last_name,

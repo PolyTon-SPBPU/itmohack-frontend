@@ -35,10 +35,10 @@ export const routes = RoutesConfig.create([
   createRoot(DEFAULT_ROOT, [
     createView(DEFAULT_VIEW, [
       createPanel(APP_PANELS.HOME, `/`, [
-        createModal(MODAL.LOGIN, `/${MODAL.LOGIN}`, ['user_id']),
+        createModal(MODAL.LOGIN, `/${MODAL.LOGIN}`, []),
         createModal(MODAL.REGISTER, `/${MODAL.REGISTER}`, []),
         createModal(MODAL.DONATE, `/${MODAL.DONATE}`, []),
-        createModal(MODAL.SHOP_ITEM, `/${MODAL.SHOP_ITEM}`, ['item_id'])
+        createModal(MODAL.SHOP_ITEM, `/${MODAL.SHOP_ITEM}`, [])
       ]),
       createPanel(APP_PANELS.TASK, `/${APP_PANELS.TASK}`),
       createPanel(APP_PANELS.PROFILE, `/${APP_PANELS.PROFILE}`, [
