@@ -35,11 +35,9 @@ export const App = () => {
           "VKWebAppGetLaunchParams"
         );
 
-        const userExists = await httpService(
+        const { data: userExists } = await httpService(
           access_token
         ).get<boolean>(`/user/exist/${launchParams.vk_user_id}`);
-
-        console.log(userExists);
 
         if (userExists) {
           navigator.push(`/${MODAL.LOGIN}`, {
