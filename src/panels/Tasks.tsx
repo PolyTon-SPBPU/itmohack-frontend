@@ -8,13 +8,12 @@ import { useCookies } from "react-cookie";
 
 export const Tasks: FC = () => {
   const [{ access_token }] = useCookies(["access_token"]);
-  const { data, isLoading } = useQuery<TaskT[]>({
+  const { data, isLoading } = useQuery<{ data: TaskT[] }>({
     queryKey: ["tasks"],
     queryFn: () => httpService(access_token).get("/task"),
   });
 
-  console.log(data);
-  const tasks = useMemo(() => data || [], [data]);
+  const tasks = useMemo(() => data?.data || [], [data]);
 
   return (
     <Flex
