@@ -13,6 +13,7 @@ export const Tasks: FC = () => {
     queryFn: () => httpService(access_token).get("/task"),
   });
 
+  console.log(data);
   const tasks = useMemo(() => data.data || [], [data]);
 
   return (

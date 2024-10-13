@@ -19,6 +19,8 @@ export const ProfilePreview: FC = () => {
       queryFn: () =>
         httpService(access_token).get("/auth/user/me"),
     });
+
+  console.log(userData);
   const user = (userData || {}) as UserT;
 
   const { data: vkData, isLoading: isVkLoading } = useQuery({
