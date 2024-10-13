@@ -15,6 +15,7 @@ export const LoginModal: FC<{ user: UserInfo }> = ({ user }) => {
   ]);
   const { mutateAsync: patchUser } = useMutation({
     mutationFn: (data: {
+      access_token: string;
       birthday: string;
       first_name: string;
       last_name: string;
@@ -48,8 +49,12 @@ export const LoginModal: FC<{ user: UserInfo }> = ({ user }) => {
 
     try {
       const { data } = await login(submitData);
-      await patchUser({ ...user, birthday: user.bdate });
       setCookies("access_token", data.access_token);
+      await patchUser({
+        ...user,
+        access_token,
+        birthday: user.bdate,
+      });
       navigator.hideModal();
     } catch (err) {
       navigator.showPopout(<ErrorAlert error={err} />);
