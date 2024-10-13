@@ -19,7 +19,7 @@ export const Currency: FC<CurrencyPropsT> = ({
   return (
     <Flex
       direction="row"
-      align="center"
+      align="end"
       justify="start"
       style={{ ...style, columnGap: "2px" }}
     >

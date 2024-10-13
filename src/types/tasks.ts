@@ -1,3 +1,8 @@
+import { CompSVG } from './../ui/CompSVG';
+import { ArtSVG } from '../ui/ArtSVG';
+import { GameSVG } from '../ui/GameSVG';
+import { BallSVG } from '../ui/BallSVG';
+import { BookSVG } from '../ui/BookSVG';
 export type TaskT = {
   id: number;
   title: string;
@@ -5,6 +10,7 @@ export type TaskT = {
   branch: BRANCH;
   price_tokens: number;
   price_branch: number;
+  is_completed?: boolean
   // qr?: File;
 }
 
@@ -19,22 +25,22 @@ export enum BRANCH {
 export const branchInfo = {
   [BRANCH.IT]: {
     title: 'Программирование',
-    icon: 'div'
+    icon: CompSVG
   },
   [BRANCH.ART]: {
     title: 'Исскуство и культура',
-    icon: 'div'
+    icon: ArtSVG
   },
   [BRANCH.GAME]: {
     title: 'Киберспорт',
-    icon: 'div'
+    icon: GameSVG
   },
   [BRANCH.SPORT]: {
     title: 'Спорт',
-    icon: 'div'
+    icon: BallSVG
   },
   [BRANCH.SCIENCE]: {
     title: 'Точные науки',
-    icon: 'div'
+    icon: BookSVG
   },
 }

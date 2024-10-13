@@ -16,6 +16,8 @@ export const TaskCard: FC<TaskCardPropsT> = ({ task }) => {
     navigator.push("/task?task_id=" + task.id);
   };
 
+  const Icon = branchInfo[task.branch].icon;
+
   return (
     <Card
       style={{
@@ -25,10 +27,21 @@ export const TaskCard: FC<TaskCardPropsT> = ({ task }) => {
       }}
       onClick={handleClick}
     >
+      <div
+        style={{
+          width: "10px",
+          height: "10px",
+          borderRadius: "100px",
+          border: "2px solid var(--color-primary)",
+          backgroundColor: task.is_completed
+            ? "var(--color-primary)"
+            : "transparent",
+        }}
+      ></div>
       <Text size={14} weight={600} mb={4}>
         {task.title}
       </Text>
-      <Text size={12} mb={6}>
+      <Text size={12} mb={10}>
         {task.text}
       </Text>
       <Flex
@@ -37,9 +50,16 @@ export const TaskCard: FC<TaskCardPropsT> = ({ task }) => {
         align="center"
       >
         <Currency>{task.price_tokens}</Currency>
-        <Text size={12} weight={700}>
-          {branchInfo[task.branch].title}
-        </Text>
+        <Flex
+          align="center"
+          justify="end"
+          style={{ columnGap: "4px" }}
+        >
+          <Icon width={12} color="black" />
+          <Text size={12} weight={700}>
+            {branchInfo[task.branch].title}
+          </Text>
+        </Flex>
       </Flex>
     </Card>
   );
