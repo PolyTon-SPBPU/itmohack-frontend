@@ -33,6 +33,10 @@ export const Task: FC<NavIdProps & { user: UserInfo }> = ({
   const [{ access_token }] = useCookies(["access_token"]);
   const [params] = useSearchParams();
   const task_id = params.get("task_id");
+  const title = params.get("title");
+  const text = params.get("text");
+  const price = params.get("price");
+  const branch = params.get("branch");
 
   const { mutateAsync: asos } = useMutation({
     mutationFn: () =>
@@ -84,7 +88,7 @@ export const Task: FC<NavIdProps & { user: UserInfo }> = ({
       </PanelHeader>
       <div style={{ padding: "22px 24px" }}>
         <Text size={24} weight={600} mb={10}>
-          {task?.title}
+          {title}
         </Text>
         <Flex
           direction="row"
@@ -93,14 +97,12 @@ export const Task: FC<NavIdProps & { user: UserInfo }> = ({
           style={{ columnGap: "8px", marginBottom: "12px" }}
         >
           <Text size={20} weight={600}>
-            {branchInfo[task?.branch]?.title}
+            {branchInfo[branch]?.title}
           </Text>
-          <Currency size={20}>
-            +{task?.price_tokens || 0}
-          </Currency>
+          <Currency size={20}>+{price}</Currency>
         </Flex>
         <Text size={16} mb={22}>
-          {task?.text}
+          {text}
         </Text>
         <Flex justify="center">
           <QRCode
@@ -146,7 +148,7 @@ export const Task: FC<NavIdProps & { user: UserInfo }> = ({
           mode="secondary"
           size="m"
         >
-          Я выполнил
+          Задача выполнена
         </Button>
       </div>
     </Panel>

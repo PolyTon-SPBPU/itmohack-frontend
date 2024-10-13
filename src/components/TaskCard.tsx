@@ -13,7 +13,9 @@ export const TaskCard: FC<TaskCardPropsT> = ({ task }) => {
   const navigator = useRouteNavigator();
 
   const handleClick = () => {
-    navigator.push("/task?task_id=" + task.id);
+    navigator.push(
+      `/task?task_id=${task.id}&title=${task.title}&text=${task.text}&price=${task.price_tokens}&branch=${task.branch}`
+    );
   };
 
   const Icon = branchInfo[task.branch].icon;

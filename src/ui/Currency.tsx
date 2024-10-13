@@ -19,7 +19,7 @@ export const Currency: FC<CurrencyPropsT> = ({
   return (
     <Flex
       direction="row"
-      align="end"
+      align="center"
       justify="start"
       style={{ ...style, columnGap: "3px" }}
     >
@@ -30,14 +30,10 @@ export const Currency: FC<CurrencyPropsT> = ({
         <ITokenSVG
           width={size - 1}
           color="primary"
-          style={{ transform: `translateY(-${size / 1.5}px)` }}
+          style={{ transform: `translateY(-1px)` }}
         />
       ) : (
-        <XPTokenSVG
-          width={size / 2}
-          color="primary"
-          style={{ transform: `translateY(-${size / 1.5}px)` }}
-        />
+        <XPTokenSVG width={size / 1.5} color="primary" />
       )}
     </Flex>
   );
