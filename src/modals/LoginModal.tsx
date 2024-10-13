@@ -45,7 +45,7 @@ export const LoginModal: FC = () => {
       </Text>
       <Text mb={16}>Введи пин-код для входа в приложение</Text>
       <Input
-        type="number"
+        type="password"
         style={{ marginBottom: "24px" }}
         value={pinCode}
         onChange={handleChange}

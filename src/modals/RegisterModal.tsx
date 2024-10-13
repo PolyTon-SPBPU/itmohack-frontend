@@ -47,7 +47,7 @@ export const RegisterModal: FC = () => {
         Введи надежный пин-код для доступа к приложению
       </Text>
       <Input
-        type="number"
+        type="password"
         style={{ marginBottom: "24px" }}
         value={pinCode}
         onChange={handleChange}

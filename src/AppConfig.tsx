@@ -24,7 +24,14 @@ import { router } from "./routes";
 import { App } from "./App";
 import { CookiesProvider } from "react-cookie";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchInterval: 5000,
+      staleTime: 30000,
+    },
+  },
+});
 
 export const AppConfig = () => {
   const vkBridgeAppearance = useAppearance() || undefined;

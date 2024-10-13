@@ -26,8 +26,6 @@ export const App = () => {
 
   useEffect(() => {
     async function fetchData() {
-      navigator.showModal(MODAL.REGISTER);
-
       try {
         await httpService(access_token).get("/auth/user/me");
         return;
