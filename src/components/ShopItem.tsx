@@ -79,6 +79,9 @@ export const ShopItem: FC<ShopItemPropsT> = ({ item }) => {
           width: "100%",
           height: "6px",
           backgroundColor: "#FFFFFF",
+          overflow: "hidden",
+          borderBottomLeftRadius: "8px",
+          borderBottomRightRadius: "8px",
         }}
       >
         <div
@@ -89,6 +92,8 @@ export const ShopItem: FC<ShopItemPropsT> = ({ item }) => {
             width: percent * 100 + "%",
             height: "100%",
             backgroundColor: "#4980AD",
+            borderBottomLeftRadius: "8px",
+            borderBottomRightRadius: "8px",
           }}
         ></div>
       </div>

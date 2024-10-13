@@ -34,7 +34,9 @@ export const App = () => {
       setUser(user);
 
       try {
-        await httpService(access_token).get("/auth/user/me");
+        await httpService(
+          access_token || localStorage.getItem("access_token")
+        ).get("/auth/user/me");
       } catch (err) {
         const launchParams = await bridge.send(
           "VKWebAppGetLaunchParams"

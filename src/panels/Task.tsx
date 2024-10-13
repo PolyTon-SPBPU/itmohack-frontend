@@ -1,4 +1,4 @@
-import { FC, useMemo } from "react";
+import { FC, useMemo, useEffect } from "react";
 import QRCode from "react-qr-code";
 import {
   NavIdProps,
@@ -16,10 +16,11 @@ import {
 } from "@vkontakte/vk-mini-apps-router";
 import { branchInfo } from "../types/tasks";
 import { useCookies } from "react-cookie";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { httpService } from "../services/http.service";
 import { Button } from "@vkontakte/vkui";
 import { UserInfo } from "@vkontakte/vk-bridge";
+import { SuccessAlert } from "../components/SuccessAlert";
 
 export const Task: FC<NavIdProps & { user: UserInfo }> = ({
   user,
@@ -29,6 +30,17 @@ export const Task: FC<NavIdProps & { user: UserInfo }> = ({
   const [params] = useSearchParams();
   const task_id = params.get("task_id");
 
+  const { mutateAsync: getTasks } = useMutation({
+    mutationFn: () => httpService(access_token).get(`/task/my`),
+  });
+
+  const { mutateAsync: asos } = useMutation({
+    mutationFn: () =>
+      httpService(access_token).post(
+        `/task/${task_id}/user/${user.id}`
+      ),
+  });
+
   const navigator = useRouteNavigator();
   const { data } = useQuery<TaskT>({
     queryKey: ["task"],
@@ -37,6 +49,24 @@ export const Task: FC<NavIdProps & { user: UserInfo }> = ({
   });
 
   const task = useMemo(() => data || {}, [data]) as TaskT;
+
+  const handleCheck = async () => {
+    const { data: tasks } = await getTasks();
+    if (
+      tasks.find(
+        (task) =>
+          task.id === Number(task_id) && task.is_completed
+      ) != -1
+    ) {
+      navigator.showPopout(
+        <SuccessAlert desc="Задание успешно выполнено!" />
+      );
+    }
+  };
+
+  useEffect(() => {
+    asos();
+  }, [asos]);
 
   return (
     <Panel id={id}>
@@ -65,7 +95,9 @@ export const Task: FC<NavIdProps & { user: UserInfo }> = ({
           <Text size={20} weight={600}>
             {branchInfo[task.branch]?.title}
           </Text>
-          <Currency size={20}>+{task.price_tokens}</Currency>
+          <Currency size={20}>
+            +{task.price_tokens || 0}
+          </Currency>
         </Flex>
         <Text size={16} mb={22}>
           {task.text}
@@ -79,26 +111,37 @@ export const Task: FC<NavIdProps & { user: UserInfo }> = ({
             style={{
               maxWidth: "245px",
               display: "block",
+              marginBottom: "12px",
             }}
           />
         </Flex>
         <Flex
+          direction="column"
           justify="center"
           align="center"
-          style={{ columnGap: "8px", rowGap: "8px" }}
+          style={{ rowGap: "8px" }}
         >
           <a
             href={`https://polytones.online/ar/first/?access_token=${
               access_token ||
               localStorage.getItem("access_token")
-            }&task_id=${task_id}`}
-            style={{ marginBottom: "8px" }}
+            }&task_id=${Number(task_id)}`}
+            style={{
+              marginBottom: "8px",
+              display: "block",
+              width: "100%",
+            }}
+            target="_blank"
           >
             <Button size="m">
               Нажми, чтобы получить награду
             </Button>
           </a>
-          <Button mode="secondary" size="m">
+          <Button
+            onClick={handleCheck}
+            mode="secondary"
+            size="m"
+          >
             Проверить выполнение
           </Button>
         </Flex>
