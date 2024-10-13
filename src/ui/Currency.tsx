@@ -33,7 +33,7 @@ export const Currency: FC<CurrencyPropsT> = ({
           style={{ transform: "translateY(-1px)" }}
         />
       ) : (
-        <XPTokenSVG width={size - 2} color="primary" />
+        <XPTokenSVG width={size / 2} color="primary" />
       )}
     </Flex>
   );

@@ -1,10 +1,11 @@
-import { FC, useMemo, useEffect } from "react";
+import { FC, useEffect } from "react";
 import QRCode from "react-qr-code";
 import {
   NavIdProps,
   Panel,
   PanelHeader,
   PanelHeaderBack,
+  PanelHeaderButton,
   Flex,
 } from "@vkontakte/vkui";
 import { Text } from "../ui";
@@ -14,6 +15,7 @@ import {
   useSearchParams,
   useRouteNavigator,
 } from "@vkontakte/vk-mini-apps-router";
+import { Icon24Refresh } from "@vkontakte/icons";
 import { branchInfo } from "../types/tasks";
 import { useCookies } from "react-cookie";
 import { useQuery, useMutation } from "@tanstack/react-query";
@@ -26,13 +28,10 @@ export const Task: FC<NavIdProps & { user: UserInfo }> = ({
   user,
   id,
 }) => {
+  const navigator = useRouteNavigator();
   const [{ access_token }] = useCookies(["access_token"]);
   const [params] = useSearchParams();
   const task_id = params.get("task_id");
-
-  const { mutateAsync: getTasks } = useMutation({
-    mutationFn: () => httpService(access_token).get(`/task/my`),
-  });
 
   const { mutateAsync: asos } = useMutation({
     mutationFn: () =>
@@ -41,25 +40,19 @@ export const Task: FC<NavIdProps & { user: UserInfo }> = ({
       ),
   });
 
-  const navigator = useRouteNavigator();
   const { data: task } = useQuery<TaskT>({
     queryKey: ["task"],
     queryFn: () =>
       httpService(access_token).get("/task/" + task_id),
   });
 
-  const handleCheck = async () => {
-    const { data: tasks } = await getTasks();
-    if (
-      tasks.find(
-        (task) =>
-          task.id === Number(task_id) && task.is_completed
-      ) != -1
-    ) {
-      navigator.showPopout(
-        <SuccessAlert desc="Задание успешно выполнено!" />
-      );
-    }
+  console.log("LOGGG: ", params, task_id);
+  console.log("LOGGG after: ", task);
+
+  const handleComplete = async () => {
+    navigator.showPopout(
+      <SuccessAlert desc="Задание успешно выполнено!" />
+    );
   };
 
   useEffect(() => {
@@ -73,6 +66,13 @@ export const Task: FC<NavIdProps & { user: UserInfo }> = ({
           <PanelHeaderBack onClick={() => navigator.back()}>
             <Text size={15}>Назад</Text>
           </PanelHeaderBack>
+        }
+        after={
+          <PanelHeaderButton
+            onClick={() => navigator.replace("/task" + task_id)}
+          >
+            <Icon24Refresh />
+          </PanelHeaderButton>
         }
         title="Задача c QR-кодом"
       >
@@ -132,7 +132,7 @@ export const Task: FC<NavIdProps & { user: UserInfo }> = ({
             </Button>
           </a>
           <Button
-            onClick={handleCheck}
+            onClick={handleComplete}
             mode="secondary"
             size="m"
           >

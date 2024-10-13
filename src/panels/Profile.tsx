@@ -22,12 +22,11 @@ export const Profile: FC<NavIdProps> = ({ id }) => {
   const navigator = useRouteNavigator();
   const [{ access_token }] = useCookies(["access_token"]);
 
-  const { data: userData } = useQuery<UserT>({
+  const { data: user } = useQuery<UserT>({
     queryKey: ["user-me"],
     queryFn: () =>
       httpService(access_token).get("/auth/user/me"),
   });
-  const user = (userData || {}) as UserT;
 
   const { data: vkData } = useQuery({
     queryKey: ["vk-user"],
@@ -77,7 +76,7 @@ export const Profile: FC<NavIdProps> = ({ id }) => {
           <Text size={24} weight={600}>
             {vk.first_name} {vk.last_name}
           </Text>
-          <Currency size={24}>{user.tokens}</Currency>
+          <Currency size={24}>{user?.tokens}</Currency>
         </Flex>
         <Flex
           direction="row"
@@ -108,7 +107,7 @@ export const Profile: FC<NavIdProps> = ({ id }) => {
                 Искусство и культура
               </Text>
               <Currency type="points" size={15}>
-                {user.art}
+                {user?.art}
               </Currency>
             </Flex>
             <Flex
@@ -121,7 +120,7 @@ export const Profile: FC<NavIdProps> = ({ id }) => {
                 Киберспорт
               </Text>
               <Currency type="points" size={15}>
-                {user.game}
+                {user?.game}
               </Currency>
             </Flex>
             <Flex
@@ -134,7 +133,7 @@ export const Profile: FC<NavIdProps> = ({ id }) => {
                 Программирование
               </Text>
               <Currency type="points" size={15}>
-                {user.it}
+                {user?.it}
               </Currency>
             </Flex>
             <Flex
@@ -147,7 +146,7 @@ export const Profile: FC<NavIdProps> = ({ id }) => {
                 Точные и реальные науки
               </Text>
               <Currency type="points" size={15}>
-                {user.science}
+                {user?.science}
               </Currency>
             </Flex>
             <Flex
@@ -160,7 +159,7 @@ export const Profile: FC<NavIdProps> = ({ id }) => {
                 Спорт
               </Text>
               <Currency type="points" size={15}>
-                {user.sport}
+                {user?.sport}
               </Currency>
             </Flex>
           </Flex>

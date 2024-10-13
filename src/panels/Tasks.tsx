@@ -10,7 +10,7 @@ export const Tasks: FC = () => {
   const [{ access_token }] = useCookies(["access_token"]);
   const { data, isLoading } = useQuery<{ data: TaskT[] }>({
     queryKey: ["tasks"],
-    queryFn: () => httpService(access_token).get("/task"),
+    queryFn: () => httpService(access_token).get("/task/my"),
   });
 
   console.log(data);

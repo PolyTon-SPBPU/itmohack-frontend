@@ -14,15 +14,12 @@ export const ProfilePreview: FC = () => {
   const navigator = useRouteNavigator();
   const [{ access_token }] = useCookies(["access_token"]);
 
-  const { data: userData, isLoading: isUserLoading } =
+  const { data: user, isLoading: isUserLoading } =
     useQuery<UserT>({
       queryKey: ["user-me"],
       queryFn: () =>
         httpService(access_token).get("/auth/user/me"),
     });
-
-  console.log(userData);
-  const user = (userData || {}) as UserT;
 
   const { data: vkData, isLoading: isVkLoading } = useQuery({
     queryKey: ["vk-user"],
@@ -61,7 +58,7 @@ export const ProfilePreview: FC = () => {
             <Text size={20}>
               {vk.first_name} {vk.last_name}
             </Text>
-            <Currency size={16}>{user.tokens}</Currency>
+            <Currency size={16}>{user?.tokens}</Currency>
           </>
         )}
       </Flex>
