@@ -52,17 +52,17 @@ export const AppConfig = () => {
       isWebView={vkBridge.isWebView()}
       hasCustomPanelHeaderAfter={true}
     >
-      <CookiesProvider>
-        <QueryClientProvider client={queryClient}>
-          <AdaptivityProvider {...adaptivity}>
-            <AppRoot mode="full" safeAreaInsets={vkBridgeInsets}>
+      <AdaptivityProvider {...adaptivity}>
+        <AppRoot mode="full" safeAreaInsets={vkBridgeInsets}>
+          <CookiesProvider>
+            <QueryClientProvider client={queryClient}>
               <RouterProvider router={router}>
                 <App />
               </RouterProvider>
-            </AppRoot>
-          </AdaptivityProvider>
-        </QueryClientProvider>
-      </CookiesProvider>
+            </QueryClientProvider>
+          </CookiesProvider>
+        </AppRoot>
+      </AdaptivityProvider>
     </ConfigProvider>
   );
 };
