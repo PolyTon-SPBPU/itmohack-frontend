@@ -36,13 +36,16 @@ export const ShopItem: FC<ShopItemPropsT> = ({ item }) => {
     : 0;
 
   const handleClick = () => {
-    navigator.showModal(MODAL.SHOP_ITEM);
+    navigator.push("/" + MODAL.SHOP_ITEM, {
+      item_id: item.id + "",
+    });
   };
 
   return (
     <Card
       onClick={handleClick}
       style={{
+        cursor: "pointer",
         borderRadius: "8px",
         overflow: "hidden",
         position: "relative",
@@ -50,6 +53,11 @@ export const ShopItem: FC<ShopItemPropsT> = ({ item }) => {
         height: screenWidth ? cardSize : "auto",
       }}
     >
+      <img
+        src={imgSrc}
+        alt={item.name}
+        style={{ width: "100%", height: "100%" }}
+      />
       <Currency
         size={12}
         style={{
@@ -83,11 +91,6 @@ export const ShopItem: FC<ShopItemPropsT> = ({ item }) => {
           }}
         ></div>
       </div>
-      <img
-        src={imgSrc}
-        alt={item.name}
-        style={{ width: "100%", height: "100%" }}
-      />
     </Card>
   );
 };

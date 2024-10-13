@@ -1,4 +1,4 @@
-import { FC, useMemo } from "react";
+import { FC, useMemo, useState } from "react";
 import {
   NavIdProps,
   Panel,
@@ -23,6 +23,7 @@ export const Task: FC<NavIdProps> = ({ id }) => {
   const [{ access_token }] = useCookies(["access_token"]);
   const [params] = useSearchParams();
   const task_id = params.get("task_id");
+  const [qrSrc, setQrSrc] = useState<string | null>(null);
 
   const navigator = useRouteNavigator();
   const { data } = useQuery<TaskT>({
@@ -36,10 +37,12 @@ export const Task: FC<NavIdProps> = ({ id }) => {
       httpService(access_token).get("/task/" + task_id + "/qr"),
   });
 
-  const qrImg = useMemo(
-    () => (qrData ? URL.createObjectURL(qrData) : null),
-    [qrData]
-  );
+  useMemo(() => {
+    if (!qrData) return {};
+    const reader = new FileReader();
+    reader.readAsDataURL(qrData);
+    reader.onload = () => setQrSrc(reader.result as string);
+  }, [qrData]);
 
   const task = (data || {}) as TaskT;
 
@@ -76,9 +79,9 @@ export const Task: FC<NavIdProps> = ({ id }) => {
           {task.text}
         </Text>
         <Flex justify="center">
-          {qrImg && (
+          {qrData && (
             <img
-              src={qrImg}
+              src={`data:image/jpg;base64 ${qrSrc}`}
               alt="Изображение не найдено"
               style={{
                 maxWidth: "245px",
