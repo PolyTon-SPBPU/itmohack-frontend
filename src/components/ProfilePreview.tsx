@@ -1,26 +1,27 @@
 import { FC } from "react";
-import { Avatar, Flex } from "@vkontakte/vkui";
+import { Avatar, Flex, Skeleton } from "@vkontakte/vkui";
 import { Text, Currency } from "../ui";
 import { useRouteNavigator } from "@vkontakte/vk-mini-apps-router";
 // import { MODAL } from "../routes";
 import { useQuery } from "@tanstack/react-query";
 import { useCookies } from "react-cookie";
 import { httpService } from "../services/http.service";
-import { UserMeT } from "../types";
+import { UserT } from "../types";
 import bridge, { UserInfo } from "@vkontakte/vk-bridge";
 
 export const ProfilePreview: FC = () => {
   const navigator = useRouteNavigator();
   const [{ access_token }] = useCookies(["access_token"]);
 
-  const { data: userData } = useQuery<UserMeT>({
-    queryKey: ["user-me"],
-    queryFn: () =>
-      httpService(access_token).get("/auth/user/me"),
-  });
-  const user = (userData || {}) as UserMeT;
+  const { data: userData, isLoading: isUserLoading } =
+    useQuery<UserT>({
+      queryKey: ["user-me"],
+      queryFn: () =>
+        httpService(access_token).get("/auth/user/me"),
+    });
+  const user = (userData || {}) as UserT;
 
-  const { data: vkData } = useQuery({
+  const { data: vkData, isLoading: isVkLoading } = useQuery({
     queryKey: ["vk-user"],
     queryFn: () => bridge.send("VKWebAppGetUserInfo"),
   });
@@ -47,10 +48,19 @@ export const ProfilePreview: FC = () => {
         onClick={handleClick}
         style={{ rowGap: "4px" }}
       >
-        <Text size={20}>
-          {vk.first_name} {vk.last_name}
-        </Text>
-        <Currency size={16}>{user.tokens}</Currency>
+        {isUserLoading || isVkLoading ? (
+          <>
+            <Skeleton height={20} width={175} />
+            <Skeleton height={16} width={75} />
+          </>
+        ) : (
+          <>
+            <Text size={20}>
+              {vk.first_name} {vk.last_name}
+            </Text>
+            <Currency size={16}>{user.tokens}</Currency>
+          </>
+        )}
       </Flex>
       <Avatar
         noBorder
@@ -59,10 +69,10 @@ export const ProfilePreview: FC = () => {
         // onClick={handleDonate}
       >
         <img
-          src="/i-token.svg"
+          src="/i-token.png"
           alt="И"
-          height={20}
-          width={15.6}
+          height={24}
+          width={17.3}
           style={{ transform: `translateY(-1px)` }}
         />
       </Avatar>

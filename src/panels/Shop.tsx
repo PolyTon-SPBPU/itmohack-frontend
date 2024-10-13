@@ -1,5 +1,5 @@
 import { FC, useMemo } from "react";
-import { Flex } from "@vkontakte/vkui";
+import { Flex, Skeleton } from "@vkontakte/vkui";
 import { ShopItemT } from "../types";
 import { ShopItem } from "../components";
 import { Text } from "../ui";
@@ -10,7 +10,7 @@ import { ItemCategoryT } from "../types/shop";
 
 export const Shop: FC = () => {
   const [{ access_token }] = useCookies(["access_token"]);
-  const { data } = useQuery<ShopItemT[]>({
+  const { data, isLoading } = useQuery<ShopItemT[]>({
     queryKey: ["shop-items"],
     queryFn: () => httpService(access_token).get("/item"),
   });
@@ -45,14 +45,49 @@ export const Shop: FC = () => {
           height: "auto",
         }}
       >
-        {items
-          .filter((item) => item.type === "border")
-          .map((item) => (
-            <ShopItem key={item.id} item={item} />
-          ))}
+        {isLoading ? (
+          <>
+            <Skeleton
+              width="22%"
+              height={100}
+              borderRadius={8}
+            />
+            <Skeleton
+              width="22%"
+              height={100}
+              borderRadius={8}
+            />
+            <Skeleton
+              width="22%"
+              height={100}
+              borderRadius={8}
+            />
+            <Skeleton
+              width="22%"
+              height={100}
+              borderRadius={8}
+            />
+            <Skeleton
+              width="22%"
+              height={100}
+              borderRadius={8}
+            />
+            <Skeleton
+              width="22%"
+              height={100}
+              borderRadius={8}
+            />
+          </>
+        ) : (
+          items
+            .filter((item) => item.type === "border")
+            .map((item) => (
+              <ShopItem key={item.id} item={item} />
+            ))
+        )}
       </Flex>
       <Text size={16} weight={600} mb={10}>
-        Шапки:
+        Мерч:
       </Text>
       <Flex
         direction="row"
@@ -60,11 +95,46 @@ export const Shop: FC = () => {
         align="start"
         style={{ columnGap: "12px", height: "fit-content" }}
       >
-        {items
-          .filter((item) => item.type === "border")
-          .map((item) => (
-            <ShopItem key={item.id} item={item} />
-          ))}
+        {isLoading ? (
+          <>
+            <Skeleton
+              width="22%"
+              height={100}
+              borderRadius={8}
+            />
+            <Skeleton
+              width="22%"
+              height={100}
+              borderRadius={8}
+            />
+            <Skeleton
+              width="22%"
+              height={100}
+              borderRadius={8}
+            />
+            <Skeleton
+              width="22%"
+              height={100}
+              borderRadius={8}
+            />
+            <Skeleton
+              width="22%"
+              height={100}
+              borderRadius={8}
+            />
+            <Skeleton
+              width="22%"
+              height={100}
+              borderRadius={8}
+            />
+          </>
+        ) : (
+          items
+            .filter((item) => item.type === "merch")
+            .map((item) => (
+              <ShopItem key={item.id} item={item} />
+            ))
+        )}
       </Flex>
     </Flex>
   );

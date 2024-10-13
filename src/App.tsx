@@ -11,6 +11,7 @@ import {
 import {
   useActiveVkuiLocation,
   useRouteNavigator,
+  usePopout,
 } from "@vkontakte/vk-mini-apps-router";
 import "./globals.css";
 
@@ -23,6 +24,7 @@ export const App = () => {
   const [{ access_token }] = useCookies(["access_token"]);
   const { panel: activePanel = APP_PANELS.HOME } =
     useActiveVkuiLocation();
+  const popout = usePopout();
 
   useEffect(() => {
     async function fetchData() {
@@ -52,7 +54,7 @@ export const App = () => {
   }, [access_token, navigator]);
 
   return (
-    <SplitLayout modal={<AppModalRoot />}>
+    <SplitLayout modal={<AppModalRoot />} popout={popout}>
       <SplitCol>
         <View activePanel={activePanel}>
           <Task id="task" />

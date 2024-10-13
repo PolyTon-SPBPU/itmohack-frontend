@@ -1,22 +1,23 @@
 export type LeaderboardUserT = {
   id: number;
-  name: string;
+  first_name: string;
+  last_name: string;
   avatar: string;
-  balance: number;
-  isYou?: boolean;
+  tokens: number;
 }
 
-export type UserMeT = {
-  "id": 0,
-  "first_name": "string",
-  "last_name": "string",
-  "is_active": true,
-  "is_superuser": false,
-  "is_verified": false,
-  "it": 0,
-  "game": 0,
-  "sport": 0,
-  "art": 0,
-  "science": 0,
-  "tokens": 0
+export type UserT = {
+  id: number,
+  first_name: string,
+  last_name: string,
+  is_active: boolean,
+  birthday?: string;
+  is_superuser: boolean,
+  is_verified?: boolean,
+  it: number,
+  game: number,
+  sport: number,
+  art: number,
+  science: number,
+  tokens: number
 }

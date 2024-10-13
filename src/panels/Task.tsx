@@ -9,13 +9,21 @@ import {
 import { Text } from "../ui";
 import { TaskT } from "../types";
 import { Currency } from "../ui/Currency";
-import { useRouteNavigator } from "@vkontakte/vk-mini-apps-router";
+import {
+  useParams,
+  useRouteNavigator,
+} from "@vkontakte/vk-mini-apps-router";
 import { branchInfo } from "../types/tasks";
 import { useCookies } from "react-cookie";
 import { useQuery } from "@tanstack/react-query";
 import { httpService } from "../services/http.service";
+import { Button } from "@vkontakte/vkui";
 
 export const Task: FC<NavIdProps> = ({ id }) => {
+  const { user_id, task_id } = useParams<
+    "user_id" | "task_id"
+  >();
+  console.log(user_id, task_id);
   const navigator = useRouteNavigator();
   const [{ access_token }] = useCookies(["access_token"]);
   const { data } = useQuery<TaskT>({
@@ -68,6 +76,7 @@ export const Task: FC<NavIdProps> = ({ id }) => {
           />
         </Flex>
       </div>
+      <Button size="m">Проверить выполнение</Button>
     </Panel>
   );
 };

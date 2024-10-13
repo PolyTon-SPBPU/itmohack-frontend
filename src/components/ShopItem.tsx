@@ -3,7 +3,7 @@ import { Card } from "@vkontakte/vkui";
 import { ShopItemT } from "../types";
 import { Currency } from "../ui";
 import { useGetScreenWidth } from "../utils";
-import { UserMeT } from "../types/users";
+import { UserT } from "../types/users";
 import { useQuery } from "@tanstack/react-query";
 import { httpService } from "../services/http.service";
 import { useCookies } from "react-cookie";
@@ -15,12 +15,12 @@ type ShopItemPropsT = {
 export const ShopItem: FC<ShopItemPropsT> = ({ item }) => {
   const [{ access_token }] = useCookies(["access_token"]);
 
-  const { data: userData } = useQuery<UserMeT>({
+  const { data: userData } = useQuery<UserT>({
     queryKey: ["user-me"],
     queryFn: () =>
       httpService(access_token).get("/auth/user/me"),
   });
-  const user = (userData || {}) as UserMeT;
+  const user = (userData || {}) as UserT;
   const percent = (user?.tokens || 0) / item.price;
   const imgSrc = item.name + ".png";
 

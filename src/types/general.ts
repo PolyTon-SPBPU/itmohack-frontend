@@ -3,3 +3,8 @@ export type SystemColorT =
   "gray-light" |
   "primary" |
   "black"
+
+export type SVGPropsT = {
+  width: number;
+  color: SystemColorT
+}

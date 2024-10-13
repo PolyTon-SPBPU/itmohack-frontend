@@ -8,6 +8,7 @@ import {
 } from "@vkontakte/vk-mini-apps-router";
 import { httpService } from "../services";
 import { useCookies } from "react-cookie";
+import { ErrorAlert } from "../components";
 
 export const LoginModal: FC = () => {
   const userId = useParams<"used_id">();
@@ -34,6 +35,7 @@ export const LoginModal: FC = () => {
       setCookies("access_token", data.access_token);
       navigator.hideModal();
     } catch (err) {
+      navigator.showPopout(<ErrorAlert error={err} />);
       setPinCode("");
     }
   };

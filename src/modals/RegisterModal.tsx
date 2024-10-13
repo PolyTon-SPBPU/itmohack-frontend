@@ -6,6 +6,7 @@ import { useRouteNavigator } from "@vkontakte/vk-mini-apps-router";
 import { MODAL } from "../routes";
 import bridge from "@vkontakte/vk-bridge";
 import { useMutation } from "@tanstack/react-query";
+import { ErrorAlert } from "../components";
 
 export const RegisterModal: FC = () => {
   const navigator = useRouteNavigator();
@@ -34,6 +35,7 @@ export const RegisterModal: FC = () => {
       await register(submitData);
       navigator.showModal(MODAL.LOGIN);
     } catch (err) {
+      navigator.showPopout(<ErrorAlert error={err} />);
       setPinCode("");
     }
   };

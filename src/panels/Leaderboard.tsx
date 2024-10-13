@@ -1,114 +1,31 @@
-import { FC } from "react";
-import { Flex } from "@vkontakte/vkui";
+import { FC, useMemo } from "react";
+import { Flex, Skeleton } from "@vkontakte/vkui";
 import { LeaderboardCard } from "../components";
 import { Text } from "../ui";
-import { LeaderboardUserT } from "../types";
-import { Currency } from "../ui/Currency";
-
-const MOCK_USERS: LeaderboardUserT[] = [
-  {
-    id: 0,
-    name: "Гай Юлий Цезарь",
-    balance: 1250,
-    avatar: "/avatar.png",
-  },
-  {
-    id: 1,
-    name: "Гай Юлий Цезарь",
-    balance: 1250,
-    avatar: "/avatar.png",
-  },
-  {
-    id: 2,
-    name: "Гай Юлий Цезарь",
-    balance: 1250,
-    avatar: "/avatar.png",
-  },
-  {
-    id: 3,
-    name: "Гай Юлий Цезарь",
-    balance: 1250,
-    avatar: "/avatar.png",
-  },
-  {
-    id: 4,
-    name: "Гай Юлий Цезарь",
-    balance: 1250,
-    avatar: "/avatar.png",
-  },
-  {
-    id: 5,
-    name: "Гай Юлий Цезарь",
-    balance: 1250,
-    avatar: "/avatar.png",
-  },
-  {
-    id: 6,
-    name: "Гай Юлий Цезарь",
-    balance: 1250,
-    avatar: "/avatar.png",
-  },
-  {
-    id: 7,
-    name: "Гай Юлий Цезарь",
-    balance: 1250,
-    avatar: "/avatar.png",
-  },
-  {
-    id: 8,
-    name: "Гай Юлий Цезарь",
-    balance: 1250,
-    avatar: "/avatar.png",
-  },
-  {
-    id: 10,
-    name: "Гай Юлий Цезарь",
-    balance: 1250,
-    avatar: "/avatar.png",
-  },
-  {
-    id: 11,
-    name: "Гай Юлий Цезарь",
-    balance: 1250,
-    avatar: "/avatar.png",
-  },
-  {
-    id: 12,
-    name: "Гай Юлий Цезарь",
-    balance: 1250,
-    avatar: "/avatar.png",
-    isYou: true,
-  },
-  {
-    id: 13,
-    name: "Гай Юлий Цезарь",
-    balance: 1250,
-    avatar: "/avatar.png",
-  },
-  {
-    id: 14,
-    name: "Гай Юлий Цезарь",
-    balance: 1250,
-    avatar: "/avatar.png",
-  },
-  {
-    id: 15,
-    name: "Гай Юлий Цезарь",
-    balance: 1250,
-    avatar: "/avatar.png",
-  },
-  {
-    id: 16,
-    name: "Гай Юлий Цезарь",
-    balance: 1250,
-    avatar: "/avatar.png",
-  },
-];
+import { httpService } from "../services/http.service";
+import { useQuery } from "@tanstack/react-query";
+import { useCookies } from "react-cookie";
+import { UserT } from "../types";
+import bridge from "@vkontakte/vk-bridge";
+import { UserInfo } from "@vkontakte/vk-bridge";
 
 export const Leaderboard: FC = () => {
+  const [{ access_token }] = useCookies(["access_token"]);
+  const { data, isLoading } = useQuery<UserT[]>({
+    queryKey: ["users"],
+    queryFn: () => httpService(access_token).get("/user"),
+  });
+  const users = useMemo(() => data || [], [data]);
+
+  const { data: vkData } = useQuery({
+    queryKey: ["vk-user"],
+    queryFn: () => bridge.send("VKWebAppGetUserInfo"),
+  });
+  const vk = (vkData || {}) as UserInfo;
+
   return (
     <div style={{ padding: "22px 24px" }}>
-      <Flex
+      {/* <Flex
         direction="row"
         justify="start"
         align="center"
@@ -118,19 +35,62 @@ export const Leaderboard: FC = () => {
           Всего заработано за сезон:{" "}
         </Text>
         <Currency size={16}>12405</Currency>
-      </Flex>
+      </Flex> */}
       <Flex
         direction="column"
         align="stretch"
         style={{ rowGap: "12px" }}
       >
-        {MOCK_USERS.slice(0, 10).map((user, index) => (
-          <LeaderboardCard
-            key={user.id}
-            place={index + 1}
-            user={user}
-          />
-        ))}
+        {isLoading ? (
+          <>
+            <Skeleton
+              width="100%"
+              height={40}
+              borderRadius={8}
+            />
+            <Skeleton
+              width="100%"
+              height={40}
+              borderRadius={8}
+            />
+            <Skeleton
+              width="100%"
+              height={40}
+              borderRadius={8}
+            />
+            <Skeleton
+              width="100%"
+              height={40}
+              borderRadius={8}
+            />
+            <Skeleton
+              width="100%"
+              height={40}
+              borderRadius={8}
+            />
+            <Skeleton
+              width="100%"
+              height={40}
+              borderRadius={8}
+            />
+            <Skeleton
+              width="100%"
+              height={40}
+              borderRadius={8}
+            />
+          </>
+        ) : (
+          users
+            .slice(0, 10)
+            .map((user, index) => (
+              <LeaderboardCard
+                key={user.id}
+                place={index + 1}
+                user={user}
+                mine={user.id == vk?.id}
+              />
+            ))
+        )}
         <Text
           weight={700}
           size={22}
@@ -142,24 +102,12 @@ export const Leaderboard: FC = () => {
         >
           ...
         </Text>
-        {MOCK_USERS.slice(10, 13).map((user, index) => (
+        {users.slice(10, 16).map((user, index) => (
           <LeaderboardCard
             key={user.id}
             place={index + 11}
             user={user}
-          />
-        ))}
-        <LeaderboardCard
-          key={MOCK_USERS[13].id}
-          place={14}
-          user={MOCK_USERS[13]}
-          mine
-        />
-        {MOCK_USERS.slice(14).map((user, index) => (
-          <LeaderboardCard
-            key={user.id}
-            place={index + 15}
-            user={user}
+            mine={user.id == vk?.id}
           />
         ))}
       </Flex>

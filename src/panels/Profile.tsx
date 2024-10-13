@@ -14,7 +14,7 @@ import { ShopItemT } from "../types";
 import { ProfileItem } from "../components/ProfileItem";
 import { useCookies } from "react-cookie";
 import { useQuery } from "@tanstack/react-query";
-import { UserMeT } from "../types/users";
+import { UserT } from "../types/users";
 import { httpService } from "../services/http.service";
 import bridge from "@vkontakte/vk-bridge";
 import { ItemCategoryT } from "../types/shop";
@@ -23,12 +23,12 @@ export const Profile: FC<NavIdProps> = ({ id }) => {
   const navigator = useRouteNavigator();
   const [{ access_token }] = useCookies(["access_token"]);
 
-  const { data: userData } = useQuery<UserMeT>({
+  const { data: userData } = useQuery<UserT>({
     queryKey: ["user-me"],
     queryFn: () =>
       httpService(access_token).get("/auth/user/me"),
   });
-  const user = (userData || {}) as UserMeT;
+  const user = (userData || {}) as UserT;
 
   const { data: vkData } = useQuery({
     queryKey: ["vk-user"],

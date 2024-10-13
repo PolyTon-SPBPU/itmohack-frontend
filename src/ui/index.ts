@@ -1,2 +1,7 @@
 export * from './Text'
 export * from './Currency'
+export * from './ArtSVG'
+export * from './BallSVG'
+export * from './BookSVG'
+export * from './CompSVG'
+export * from './GameSVG'

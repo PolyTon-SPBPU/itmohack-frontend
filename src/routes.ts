@@ -40,8 +40,7 @@ export const routes = RoutesConfig.create([
         createModal(MODAL.DONATE, `/${MODAL.DONATE}`, []),
         createModal(MODAL.SHOP_ITEM, `/${MODAL.SHOP_ITEM}`, [])
       ]),
-      createPanel(APP_PANELS.TASK, `/${APP_PANELS.TASK}`, [
-      ]),
+      createPanel(APP_PANELS.TASK, `/${APP_PANELS.TASK}`),
       createPanel(APP_PANELS.PROFILE, `/${APP_PANELS.PROFILE}`, [
         createModal(MODAL.PROFILE_ITEM, `/${MODAL.PROFILE_ITEM}`, [])
       ]),
