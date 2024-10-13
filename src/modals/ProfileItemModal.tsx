@@ -1,10 +1,13 @@
 import { FC } from "react";
 import { Text } from "../ui";
 import { Group, Flex, Button } from "@vkontakte/vkui";
+import { useRouteNavigator } from "@vkontakte/vk-mini-apps-router";
 
 export const ProfileItemModal: FC = () => {
+  const navigator = useRouteNavigator();
+
   const handleSubmit = () => {};
-  const handleCancel = () => {};
+  const handleCancel = () => navigator.hideModal();
 
   return (
     <Group>

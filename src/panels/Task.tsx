@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useMemo } from "react";
 import {
   NavIdProps,
   Panel,
@@ -10,7 +10,7 @@ import { Text } from "../ui";
 import { TaskT } from "../types";
 import { Currency } from "../ui/Currency";
 import {
-  useParams,
+  useSearchParams,
   useRouteNavigator,
 } from "@vkontakte/vk-mini-apps-router";
 import { branchInfo } from "../types/tasks";
@@ -21,7 +21,8 @@ import { Button } from "@vkontakte/vkui";
 
 export const Task: FC<NavIdProps> = ({ id }) => {
   const [{ access_token }] = useCookies(["access_token"]);
-  const { task_id } = useParams<"task_id">();
+  const [params] = useSearchParams();
+  const task_id = params.get("task_id");
 
   const navigator = useRouteNavigator();
   const { data } = useQuery<TaskT>({
@@ -29,6 +30,16 @@ export const Task: FC<NavIdProps> = ({ id }) => {
     queryFn: () =>
       httpService(access_token).get("/task/" + task_id),
   });
+  const { data: qrData } = useQuery<File>({
+    queryKey: ["qr"],
+    queryFn: () =>
+      httpService(access_token).get("/task/" + task_id + "/qr"),
+  });
+
+  const qrImg = useMemo(
+    () => (qrData ? URL.createObjectURL(qrData) : null),
+    [qrData]
+  );
 
   const task = (data || {}) as TaskT;
 
@@ -65,22 +76,27 @@ export const Task: FC<NavIdProps> = ({ id }) => {
           {task.text}
         </Text>
         <Flex justify="center">
-          <img
-            src="/qr.png"
-            alt="Изображение не найдено"
-            style={{
-              maxWidth: "245px",
-              display: "block",
-            }}
-          />
+          {qrImg && (
+            <img
+              src={qrImg}
+              alt="Изображение не найдено"
+              style={{
+                maxWidth: "245px",
+                display: "block",
+              }}
+            />
+          )}
         </Flex>
+        <a
+          href={`https://polytones.online/ar/first/?access_token=${access_token}&task_id=${task_id}`}
+          style={{ marginBottom: "8px" }}
+        >
+          <Button size="m">Нажми, чтобы получить награду</Button>
+        </a>
+        <Button mode="secondary" size="m">
+          Проверить выполнение
+        </Button>
       </div>
-      <a
-        href={`https://polytones.online/ar/first/?access_token=${access_token}&task_id=${task_id}`}
-      >
-        <Text>Нажми, чтобы получить награду</Text>
-      </a>
-      <Button size="m">Проверить выполнение</Button>
     </Panel>
   );
 };

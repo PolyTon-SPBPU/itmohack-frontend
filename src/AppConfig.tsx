@@ -24,7 +24,7 @@ import { router } from "./routes";
 import { App } from "./App";
 import { CookiesProvider } from "react-cookie";
 
-const queryClient = new QueryClient({
+export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       refetchInterval: 5000,

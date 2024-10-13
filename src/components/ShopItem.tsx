@@ -7,6 +7,8 @@ import { UserT } from "../types/users";
 import { useQuery } from "@tanstack/react-query";
 import { httpService } from "../services/http.service";
 import { useCookies } from "react-cookie";
+import { useRouteNavigator } from "@vkontakte/vk-mini-apps-router";
+import { MODAL } from "../routes";
 
 type ShopItemPropsT = {
   item: ShopItemT;
@@ -38,6 +40,7 @@ const borderImgs = [
 ];
 
 export const ShopItem: FC<ShopItemPropsT> = ({ item }) => {
+  const navigator = useRouteNavigator();
   const [{ access_token }] = useCookies(["access_token"]);
 
   const { data: userData } = useQuery<UserT>({
@@ -57,8 +60,13 @@ export const ShopItem: FC<ShopItemPropsT> = ({ item }) => {
     ? (screenWidth - 48) / 4 - 4 + "px"
     : 0;
 
+  const handleClick = () => {
+    navigator.showModal(MODAL.SHOP_ITEM);
+  };
+
   return (
     <Card
+      onClick={handleClick}
       style={{
         borderRadius: "8px",
         overflow: "hidden",

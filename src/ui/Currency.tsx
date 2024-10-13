@@ -30,7 +30,7 @@ export const Currency: FC<CurrencyPropsT> = ({
           alt="И"
           height={size * 0.9}
           width={size * 0.9 * 0.72}
-          style={{ transform: `translateY(-1.5px)` }}
+          style={{ transform: `translateY(-0.5px)` }}
         />
       ) : (
         <img

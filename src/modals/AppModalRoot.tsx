@@ -34,7 +34,7 @@ export const AppModalRoot: FC<{ user: UserInfo }> = ({
         <ProfileItemModal />
       </ModalCard>
       <ModalCard id={MODAL.SHOP_ITEM}>
-        <ShopItemModal />
+        <ShopItemModal user={user} />
       </ModalCard>
       <ModalCard id={MODAL.DONATE}>
         <DonateModal />

@@ -56,7 +56,7 @@ export const RegisterModal: FC<{ user: UserInfo }> = ({
         onChange={handleChange}
       />
       <Button
-        disabled={pinCode.length < 6}
+        disabled={pinCode.length < 1}
         onClick={handleSubmit}
         size="m"
       >
