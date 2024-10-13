@@ -18,8 +18,6 @@ export const TaskCard: FC<TaskCardPropsT> = ({ task }) => {
     );
   };
 
-  const Icon = branchInfo[task.branch].icon;
-
   return (
     <Card
       style={{
@@ -61,7 +59,6 @@ export const TaskCard: FC<TaskCardPropsT> = ({ task }) => {
           justify="end"
           style={{ columnGap: "4px" }}
         >
-          <Icon width={14} color="black" />
           <Text size={12} weight={700}>
             {branchInfo[task.branch].title}
           </Text>
