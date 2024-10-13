@@ -8,11 +8,10 @@ import { Shop } from "./Shop";
 import { Leaderboard } from "./Leaderboard";
 
 export interface HomeProps extends NavIdProps {
-  fetchedUser?: UserInfo;
+  user?: UserInfo;
 }
 
-export const Home: FC<HomeProps> = ({ id, fetchedUser }) => {
-  console.log(fetchedUser);
+export const Home: FC<HomeProps> = ({ id }) => {
   const [selected, setSelected] = useState<string>(
     HOME_PANELS.TASKS
   );

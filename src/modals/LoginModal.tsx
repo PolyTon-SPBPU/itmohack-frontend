@@ -7,8 +7,9 @@ import { httpService } from "../services";
 import { useCookies } from "react-cookie";
 import { ErrorAlert } from "../components";
 import bridge from "@vkontakte/vk-bridge";
+import { UserInfo } from "@vkontakte/vk-bridge";
 
-export const LoginModal: FC = () => {
+export const LoginModal: FC<{ user: UserInfo }> = ({ user }) => {
   const { mutateAsync: login } = useMutation({
     mutationFn: (data: unknown) =>
       httpService().post("/auth/login", data),
@@ -44,7 +45,7 @@ export const LoginModal: FC = () => {
   return (
     <Group>
       <Text size={18} weight={700} mb={8}>
-        Привет, Илья!
+        Привет, {user.first_name}!
       </Text>
       <Text mb={16}>Введи пин-код для входа в приложение</Text>
       <Input

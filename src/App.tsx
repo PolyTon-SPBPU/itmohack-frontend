@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { httpService } from "./services";
 import bridge from "@vkontakte/vk-bridge";
@@ -18,16 +18,21 @@ import "./globals.css";
 import { Home, Task, Profile } from "./panels";
 import { APP_PANELS, MODAL } from "./routes";
 import { AppModalRoot } from "./modals";
+import { UserInfo } from "@vkontakte/vk-bridge";
 
 export const App = () => {
   const navigator = useRouteNavigator();
   const [{ access_token }] = useCookies(["access_token"]);
+  const [user, setUser] = useState<UserInfo | null>();
   const { panel: activePanel = APP_PANELS.HOME } =
     useActiveVkuiLocation();
   const popout = usePopout();
 
   useEffect(() => {
     async function fetchData() {
+      const user = await bridge.send("VKWebAppGetUserInfo");
+      setUser(user);
+
       try {
         await httpService(access_token).get("/auth/user/me");
       } catch (err) {
@@ -51,7 +56,10 @@ export const App = () => {
   }, [access_token, navigator]);
 
   return (
-    <SplitLayout modal={<AppModalRoot />} popout={popout}>
+    <SplitLayout
+      modal={<AppModalRoot user={user} />}
+      popout={popout}
+    >
       <SplitCol>
         <View activePanel={activePanel}>
           <Task id="task" />

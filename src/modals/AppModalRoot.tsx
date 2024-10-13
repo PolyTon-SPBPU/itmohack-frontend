@@ -5,6 +5,7 @@ import {
 } from "@vkontakte/vk-mini-apps-router";
 import { ModalRoot, ModalCard } from "@vkontakte/vkui";
 import { MODAL } from "../routes";
+import { UserInfo } from "@vkontakte/vk-bridge";
 import {
   LoginModal,
   RegisterModal,
@@ -13,7 +14,9 @@ import {
   DonateModal,
 } from "./";
 
-export const AppModalRoot: FC = () => {
+export const AppModalRoot: FC<{ user: UserInfo }> = ({
+  user,
+}) => {
   const { modal: activeModal } = useActiveVkuiLocation();
   const navigator = useRouteNavigator();
 
@@ -22,7 +25,7 @@ export const AppModalRoot: FC = () => {
   return (
     <ModalRoot activeModal={activeModal} onClose={handleClose}>
       <ModalCard id={MODAL.LOGIN}>
-        <LoginModal />
+        <LoginModal user={user} />
       </ModalCard>
       <ModalCard id={MODAL.REGISTER}>
         <RegisterModal />
