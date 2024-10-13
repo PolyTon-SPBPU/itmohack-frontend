@@ -87,7 +87,7 @@ export const Task: FC<NavIdProps & { user: UserInfo }> = ({
           <QRCode
             value={JSON.stringify({
               user_id: user.id,
-              task_id,
+              task_id: Number(task_id),
             })}
             style={{
               maxWidth: "245px",
