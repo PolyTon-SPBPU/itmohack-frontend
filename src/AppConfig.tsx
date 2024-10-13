@@ -1,3 +1,8 @@
+import {
+  QueryClientProvider,
+  // useQueryClient,
+  QueryClient,
+} from "@tanstack/react-query";
 import vkBridge, {
   parseURLSearchParamsForGetLaunchParams,
 } from "@vkontakte/vk-bridge";
@@ -17,6 +22,9 @@ import "@vkontakte/vkui/dist/vkui.css";
 import { transformVKBridgeAdaptivity } from "./utils";
 import { router } from "./routes";
 import { App } from "./App";
+import { CookiesProvider } from "react-cookie";
+
+const queryClient = new QueryClient();
 
 export const AppConfig = () => {
   const vkBridgeAppearance = useAppearance() || undefined;
@@ -29,21 +37,25 @@ export const AppConfig = () => {
   );
 
   return (
-    <ConfigProvider
-      appearance={vkBridgeAppearance}
-      platform={
-        vk_platform === "desktop_web" ? "vkcom" : undefined
-      }
-      isWebView={vkBridge.isWebView()}
-      hasCustomPanelHeaderAfter={true}
-    >
-      <AdaptivityProvider {...adaptivity}>
-        <AppRoot mode="full" safeAreaInsets={vkBridgeInsets}>
-          <RouterProvider router={router}>
-            <App />
-          </RouterProvider>
-        </AppRoot>
-      </AdaptivityProvider>
-    </ConfigProvider>
+    <CookiesProvider>
+      <QueryClientProvider client={queryClient}>
+        <ConfigProvider
+          appearance={vkBridgeAppearance}
+          platform={
+            vk_platform === "desktop_web" ? "vkcom" : undefined
+          }
+          isWebView={vkBridge.isWebView()}
+          hasCustomPanelHeaderAfter={true}
+        >
+          <AdaptivityProvider {...adaptivity}>
+            <AppRoot mode="full" safeAreaInsets={vkBridgeInsets}>
+              <RouterProvider router={router}>
+                <App />
+              </RouterProvider>
+            </AppRoot>
+          </AdaptivityProvider>
+        </ConfigProvider>
+      </QueryClientProvider>
+    </CookiesProvider>
   );
 };

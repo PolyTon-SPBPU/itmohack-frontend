@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useMemo } from "react";
 import {
   Panel,
   NavIdProps,
@@ -12,69 +12,45 @@ import { Text, Currency } from "../ui";
 import { useRouteNavigator } from "@vkontakte/vk-mini-apps-router";
 import { ShopItemT } from "../types";
 import { ProfileItem } from "../components/ProfileItem";
+import { useCookies } from "react-cookie";
+import { useQuery } from "@tanstack/react-query";
+import { UserMeT } from "../types/users";
+import { httpService } from "../services/http.service";
+import bridge from "@vkontakte/vk-bridge";
+import { ItemCategoryT } from "../types/shop";
 
-export interface ProfilePropsT extends NavIdProps {
-  fetchedUser?: UserInfo;
-}
-
-const MOCK_ITEMS: ShopItemT[] = [
-  {
-    id: 0,
-    price: 1000,
-    type: "border",
-  },
-  {
-    id: 1,
-    price: 2000,
-    type: "border",
-  },
-  {
-    id: 2,
-    price: 3000,
-    type: "border",
-  },
-];
-
-type ProfileT = {
-  total_balance: number;
-  balance: number;
-  sport: number;
-  cybersport: number;
-  programming: number;
-  art: number;
-  science: number;
-};
-
-const MOCK_USER: UserInfo & ProfileT = {
-  id: 0,
-  first_name: "Илья",
-  last_name: "Глинский",
-  sex: 1,
-  city: {
-    id: 0,
-    title: "Санкт-Петербург",
-  },
-  country: {
-    id: 0,
-    title: "Россия",
-  },
-  photo_100: "/avatar.png",
-  photo_200: "/avatar.png",
-  total_balance: 9050,
-  balance: 4250,
-  art: 1250,
-  cybersport: 250,
-  programming: 1200,
-  science: 150,
-  sport: 1000,
-};
-
-export const Profile: FC<ProfilePropsT> = ({
-  id,
-  fetchedUser,
-}) => {
+export const Profile: FC<NavIdProps> = ({ id }) => {
   const navigator = useRouteNavigator();
-  console.log(fetchedUser);
+  const [{ access_token }] = useCookies(["access_token"]);
+
+  const { data: userData } = useQuery<UserMeT>({
+    queryKey: ["user-me"],
+    queryFn: () =>
+      httpService(access_token).get("/auth/user/me"),
+  });
+  const user = (userData || {}) as UserMeT;
+
+  const { data: vkData } = useQuery({
+    queryKey: ["vk-user"],
+    queryFn: () => bridge.send("VKWebAppGetUserInfo"),
+  });
+  const vk = (vkData || {}) as UserInfo;
+
+  const { data } = useQuery<ShopItemT[]>({
+    queryKey: ["my-items"],
+    queryFn: () => httpService(access_token).get("/item/my"),
+  });
+
+  const items = useMemo(
+    () =>
+      data?.map((item) => ({
+        ...item,
+        type: (item.name.includes("r")
+          ? "border"
+          : "merch") as ItemCategoryT,
+      })) || [],
+    [data]
+  );
 
   return (
     <Panel id={id}>
@@ -98,9 +74,9 @@ export const Profile: FC<ProfilePropsT> = ({
           style={{ marginBottom: "18px" }}
         >
           <Text size={24} weight={600}>
-            {MOCK_USER.first_name} {MOCK_USER.last_name}
+            {vk.first_name} {vk.last_name}
           </Text>
-          <Currency size={24}>{MOCK_USER.balance}</Currency>
+          <Currency size={24}>{user.tokens}</Currency>
         </Flex>
         <Flex
           direction="row"
@@ -109,7 +85,7 @@ export const Profile: FC<ProfilePropsT> = ({
           style={{ columnGap: "10px", marginBottom: "14px" }}
         >
           <img
-            src={MOCK_USER.photo_200}
+            src={vk.photo_200}
             alt="Изображение не найдено"
             style={{
               width: "120px",
@@ -132,7 +108,7 @@ export const Profile: FC<ProfilePropsT> = ({
               <Text size={15} weight={700}>
                 Искусство и культура
               </Text>
-              <Currency size={15}>{MOCK_USER.art}</Currency>
+              <Currency size={15}>{user.art}</Currency>
             </Flex>
             <Flex
               direction="row"
@@ -143,9 +119,7 @@ export const Profile: FC<ProfilePropsT> = ({
               <Text size={15} weight={700}>
                 Киберспорт
               </Text>
-              <Currency size={15}>
-                {MOCK_USER.cybersport}
-              </Currency>
+              <Currency size={15}>{user.game}</Currency>
             </Flex>
             <Flex
               direction="row"
@@ -156,9 +130,7 @@ export const Profile: FC<ProfilePropsT> = ({
               <Text size={15} weight={700}>
                 Программирование
               </Text>
-              <Currency size={15}>
-                {MOCK_USER.programming}
-              </Currency>
+              <Currency size={15}>{user.it}</Currency>
             </Flex>
             <Flex
               direction="row"
@@ -169,7 +141,7 @@ export const Profile: FC<ProfilePropsT> = ({
               <Text size={15} weight={700}>
                 Точные и реальные науки
               </Text>
-              <Currency size={15}>{MOCK_USER.science}</Currency>
+              <Currency size={15}>{user.science}</Currency>
             </Flex>
             <Flex
               direction="row"
@@ -180,22 +152,9 @@ export const Profile: FC<ProfilePropsT> = ({
               <Text size={15} weight={700}>
                 Спорт
               </Text>
-              <Currency size={15}>{MOCK_USER.sport}</Currency>
+              <Currency size={15}>{user.sport}</Currency>
             </Flex>
           </Flex>
-        </Flex>
-        <Flex
-          direction="row"
-          justify="start"
-          align="center"
-          style={{ columnGap: "4px", marginBottom: "10px" }}
-        >
-          <Text size={16} weight={700}>
-            Всего заработано за сезон:{" "}
-          </Text>
-          <Currency size={16}>
-            {MOCK_USER.total_balance}
-          </Currency>
         </Flex>
         <Flex
           direction="row"
@@ -215,12 +174,14 @@ export const Profile: FC<ProfilePropsT> = ({
           align="start"
           style={{ columnGap: "12px", marginBottom: "20px" }}
         >
-          {MOCK_ITEMS.map((item) => (
-            <ProfileItem key={item.id} />
-          ))}
+          {items
+            .filter((item) => item.type === "border")
+            .map((item) => (
+              <ProfileItem key={item.id} item={item} />
+            ))}
         </Flex>
         <Text size={16} weight={600} mb={10}>
-          Шапки:
+          Мерч:
         </Text>
         <Flex
           direction="row"
@@ -228,9 +189,11 @@ export const Profile: FC<ProfilePropsT> = ({
           align="start"
           style={{ columnGap: "12px" }}
         >
-          {MOCK_ITEMS.map((item) => (
-            <ProfileItem key={item.id} />
-          ))}
+          {items
+            .filter((item) => item.type === "merch")
+            .map((item) => (
+              <ProfileItem key={item.id} item={item} />
+            ))}
         </Flex>
       </div>
     </Panel>

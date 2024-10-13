@@ -124,10 +124,41 @@ export const Leaderboard: FC = () => {
         align="stretch"
         style={{ rowGap: "12px" }}
       >
-        {MOCK_USERS.map((user, index) => (
+        {MOCK_USERS.slice(0, 10).map((user, index) => (
           <LeaderboardCard
             key={user.id}
             place={index + 1}
+            user={user}
+          />
+        ))}
+        <Text
+          weight={700}
+          size={22}
+          style={{
+            margin: "6px 0",
+            marginTop: "2px",
+            textAlign: "center",
+          }}
+        >
+          ...
+        </Text>
+        {MOCK_USERS.slice(10, 13).map((user, index) => (
+          <LeaderboardCard
+            key={user.id}
+            place={index + 11}
+            user={user}
+          />
+        ))}
+        <LeaderboardCard
+          key={MOCK_USERS[13].id}
+          place={14}
+          user={MOCK_USERS[13]}
+          mine
+        />
+        {MOCK_USERS.slice(14).map((user, index) => (
+          <LeaderboardCard
+            key={user.id}
+            place={index + 15}
             user={user}
           />
         ))}

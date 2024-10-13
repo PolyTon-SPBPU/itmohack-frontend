@@ -1,6 +1,8 @@
 export type ShopItemT = {
   id: number;
   price: number;
-  type: "border" | "hat" | 'medal';
-  owned?: boolean;
+  name: string,
+  type?: ItemCategoryT
 }
+
+export type ItemCategoryT = 'border' | 'merch'

@@ -3,6 +3,7 @@ import { Card, Flex } from "@vkontakte/vkui";
 import { Text, Currency } from "../ui";
 import { TaskT } from "../types";
 import { useRouteNavigator } from "@vkontakte/vk-mini-apps-router";
+import { branchInfo } from "../types/tasks";
 
 type TaskCardPropsT = {
   task: TaskT;
@@ -28,16 +29,16 @@ export const TaskCard: FC<TaskCardPropsT> = ({ task }) => {
         {task.title}
       </Text>
       <Text size={12} mb={6}>
-        {task.description}
+        {task.text}
       </Text>
       <Flex
         direction="row"
         justify="space-between"
         align="center"
       >
-        <Currency>{task.reward}</Currency>
+        <Currency>{task.price_tokens}</Currency>
         <Text size={12} weight={700}>
-          {task.theme}
+          {branchInfo[task.branch].title}
         </Text>
       </Flex>
     </Card>

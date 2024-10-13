@@ -8,11 +8,13 @@ import { Currency } from "../ui/Currency";
 type LeaderboardCardPropsT = {
   user: LeaderboardUserT;
   place: number;
+  mine?: boolean;
 };
 
 export const LeaderboardCard: FC<LeaderboardCardPropsT> = ({
   user,
   place,
+  mine,
 }) => {
   return (
     <Card
@@ -22,7 +24,8 @@ export const LeaderboardCard: FC<LeaderboardCardPropsT> = ({
         justifyContent: "flex-start",
         alignItems: "center",
         columnGap: "8px",
-        padding: '12px 14px'
+        padding: "12px 14px",
+        border: mine ? "1px solid var(--color-primary)" : undefined,
       }}
     >
       <Text weight={700} style={{ marginRight: "8px" }}>

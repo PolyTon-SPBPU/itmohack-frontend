@@ -1,43 +1,65 @@
-import { useState, useEffect } from "react";
-import bridge, { UserInfo } from "@vkontakte/vk-bridge";
+import { useEffect } from "react";
+import { useCookies } from "react-cookie";
+import { httpService } from "./services";
+import bridge from "@vkontakte/vk-bridge";
 import {
   View,
   SplitLayout,
   SplitCol,
   // ScreenSpinner,
 } from "@vkontakte/vkui";
-import { useActiveVkuiLocation } from "@vkontakte/vk-mini-apps-router";
+import {
+  useActiveVkuiLocation,
+  useRouteNavigator,
+} from "@vkontakte/vk-mini-apps-router";
 import "./globals.css";
 
 import { Home, Task, Profile } from "./panels";
-import { APP_PANELS } from "./routes";
+import { APP_PANELS, MODAL } from "./routes";
+import { AppModalRoot } from "./modals";
 
 export const App = () => {
+  const navigator = useRouteNavigator();
+  const [{ access_token }] = useCookies(["access_token"]);
   const { panel: activePanel = APP_PANELS.HOME } =
     useActiveVkuiLocation();
-  const [fetchedUser, setUser] = useState<
-    UserInfo | undefined
-  >();
-  // const [popout, setPopout] = useState<ReactNode | null>(
-  //   <ScreenSpinner size="large" />
-  // );
 
   useEffect(() => {
     async function fetchData() {
-      const user = await bridge.send("VKWebAppGetUserInfo");
-      setUser(user);
-      // setPopout(null);
+      navigator.showModal(MODAL.REGISTER);
+
+      try {
+        await httpService(access_token).get("/auth/user/me");
+        return;
+      } catch (err) {
+        const launchParams = await bridge.send(
+          "VKWebAppGetLaunchParams"
+        );
+
+        const userExists = await httpService(
+          access_token
+        ).get<boolean>(`/user/exist/${launchParams.vk_user_id}`);
+
+        if (userExists) {
+          navigator.push(`/${MODAL.LOGIN}`, {
+            user_id: launchParams.vk_user_id + "",
+          });
+        } else {
+          navigator.showModal(MODAL.REGISTER);
+        }
+      }
     }
+
     fetchData();
-  }, []);
+  }, [access_token, navigator]);
 
   return (
-    <SplitLayout>
+    <SplitLayout modal={<AppModalRoot />}>
       <SplitCol>
         <View activePanel={activePanel}>
           <Task id="task" />
           <Profile id="profile" />
-          <Home id="home" fetchedUser={fetchedUser} />
+          <Home id="home" />
         </View>
       </SplitCol>
     </SplitLayout>

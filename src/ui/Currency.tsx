@@ -21,7 +21,7 @@ export const Currency: FC<CurrencyPropsT> = ({
         {children}
       </Text>
       <img
-        src="/i-token.svg"
+        src="/i-token.png"
         alt="И"
         height={size}
         width={size * 0.78}

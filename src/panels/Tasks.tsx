@@ -1,43 +1,27 @@
-import { FC } from "react";
+import { FC, useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { Flex } from "@vkontakte/vkui";
 import { TaskT } from "../types";
 import { TaskCard } from "../components";
-
-const MOCK_TASKS: TaskT[] = [
-  {
-    id: 0,
-    title: "Посети мероприятие клуба Let’s art & science!",
-    description:
-      "Let's Art and Science ИТМО -дисциплинарный студенчески...",
-    reward: 1000,
-    theme: "Спорт",
-  },
-  {
-    id: 1,
-    title: "2 Посети мероприятие клуба Let’s art & science!",
-    description:
-      "Let's Art and Science ИТМО -дисциплинарный студенчески...",
-    reward: 2000,
-    theme: "Исскуство и культура",
-  },
-  {
-    id: 2,
-    title: "3 Посети мероприятие клуба Let’s art & science!",
-    description:
-      "Let's Art and Science ИТМО -дисциплинарный студенчески...",
-    reward: 3000,
-    theme: "Программирование",
-  },
-];
+import { httpService } from "../services/http.service";
+import { useCookies } from "react-cookie";
 
 export const Tasks: FC = () => {
+  const [{ access_token }] = useCookies(["access_token"]);
+  const { data } = useQuery<TaskT[]>({
+    queryKey: ["tasks"],
+    queryFn: () => httpService(access_token).get("/task"),
+  });
+
+  const tasks = useMemo(() => data || [], [data]);
+
   return (
     <Flex
       direction="column"
       align="stretch"
       style={{ rowGap: "12px", padding: "22px 24px" }}
     >
-      {MOCK_TASKS.map((task) => (
+      {tasks.map((task) => (
         <TaskCard key={task.id} task={task} />
       ))}
     </Flex>

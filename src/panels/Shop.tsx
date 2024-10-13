@@ -1,28 +1,31 @@
-import { FC } from "react";
+import { FC, useMemo } from "react";
 import { Flex } from "@vkontakte/vkui";
 import { ShopItemT } from "../types";
 import { ShopItem } from "../components";
 import { Text } from "../ui";
-
-const MOCK_ITEMS: ShopItemT[] = [
-  {
-    id: 0,
-    price: 1000,
-    type: "border",
-  },
-  {
-    id: 1,
-    price: 2000,
-    type: "border",
-  },
-  {
-    id: 2,
-    price: 3000,
-    type: "border",
-  },
-];
+import { useQuery } from "@tanstack/react-query";
+import { useCookies } from "react-cookie";
+import { httpService } from "../services/http.service";
+import { ItemCategoryT } from "../types/shop";
 
 export const Shop: FC = () => {
+  const [{ access_token }] = useCookies(["access_token"]);
+  const { data } = useQuery<ShopItemT[]>({
+    queryKey: ["shop-items"],
+    queryFn: () => httpService(access_token).get("/item"),
+  });
+
+  const items = useMemo(
+    () =>
+      data?.map((item) => ({
+        ...item,
+        type: (item.name.includes("r")
+          ? "border"
+          : "merch") as ItemCategoryT,
+      })) || [],
+    [data]
+  );
+
   return (
     <Flex
       direction="column"
@@ -42,9 +45,11 @@ export const Shop: FC = () => {
           height: "auto",
         }}
       >
-        {MOCK_ITEMS.map((item) => (
-          <ShopItem key={item.id} item={item} />
-        ))}
+        {items
+          .filter((item) => item.type === "border")
+          .map((item) => (
+            <ShopItem key={item.id} item={item} />
+          ))}
       </Flex>
       <Text size={16} weight={600} mb={10}>
         Шапки:
@@ -55,9 +60,11 @@ export const Shop: FC = () => {
         align="start"
         style={{ columnGap: "12px", height: "fit-content" }}
       >
-        {MOCK_ITEMS.map((item) => (
-          <ShopItem key={item.id} item={item} />
-        ))}
+        {items
+          .filter((item) => item.type === "border")
+          .map((item) => (
+            <ShopItem key={item.id} item={item} />
+          ))}
       </Flex>
     </Flex>
   );

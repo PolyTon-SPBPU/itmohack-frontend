@@ -3,16 +3,26 @@ import { Card } from "@vkontakte/vkui";
 import { ShopItemT } from "../types";
 import { Currency } from "../ui";
 import { useGetScreenWidth } from "../utils";
-
-const MOCK_BALANCE = 1000;
+import { UserMeT } from "../types/users";
+import { useQuery } from "@tanstack/react-query";
+import { httpService } from "../services/http.service";
+import { useCookies } from "react-cookie";
 
 type ShopItemPropsT = {
   item: ShopItemT;
-  // balance
 };
 
 export const ShopItem: FC<ShopItemPropsT> = ({ item }) => {
-  const percent = MOCK_BALANCE / item.price;
+  const [{ access_token }] = useCookies(["access_token"]);
+
+  const { data: userData } = useQuery<UserMeT>({
+    queryKey: ["user-me"],
+    queryFn: () =>
+      httpService(access_token).get("/auth/user/me"),
+  });
+  const user = (userData || {}) as UserMeT;
+  const percent = (user?.tokens || 0) / item.price;
+  const imgSrc = item.name + ".png";
 
   const screenWidth = useGetScreenWidth();
   const cardSize = screenWidth
@@ -62,6 +72,7 @@ export const ShopItem: FC<ShopItemPropsT> = ({ item }) => {
           }}
         ></div>
       </div>
+      <img src={imgSrc} alt={item.name} />
     </Card>
   );
 };
