@@ -11,9 +11,7 @@ import { UserInfo } from "@vkontakte/vk-bridge";
 import axios from "axios";
 
 export const LoginModal: FC<{ user: UserInfo }> = ({ user }) => {
-  const [{ access_token }, setCookies] = useCookies([
-    "access_token",
-  ]);
+  const [cookies, setCookies] = useCookies(["access_token"]);
   const { mutateAsync: patchUser } = useMutation({
     mutationFn: (data: {
       access_token: string;
@@ -26,7 +24,7 @@ export const LoginModal: FC<{ user: UserInfo }> = ({ user }) => {
         data,
         {
           headers: {
-            Authorization: "Bearer " + access_token,
+            Authorization: "Bearer " + data.access_token,
           },
         }
       ),
@@ -59,10 +57,10 @@ export const LoginModal: FC<{ user: UserInfo }> = ({ user }) => {
 
     try {
       const { data } = await login(submitData);
-      setCookies("access_token", data.data.access_token);
+      setCookies("access_token", data.access_token);
       await patchUser({
         ...user,
-        access_token: data.data.access_token,
+        access_token: data.access_token,
         birthday: user.bdate,
       });
       navigator.hideModal();
