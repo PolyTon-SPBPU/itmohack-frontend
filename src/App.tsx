@@ -40,9 +40,7 @@ export const App = () => {
         ).get<boolean>(`/user/exist/${launchParams.vk_user_id}`);
 
         if (userExists) {
-          navigator.push(`/${MODAL.LOGIN}`, {
-            user_id: launchParams.vk_user_id + "",
-          });
+          navigator.showModal(MODAL.LOGIN);
         } else {
           navigator.showModal(MODAL.REGISTER);
         }

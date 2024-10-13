@@ -2,16 +2,13 @@ import { FC, useState, ChangeEvent } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { Text } from "../ui";
 import { Group, Input, Button } from "@vkontakte/vkui";
-import {
-  useParams,
-  useRouteNavigator,
-} from "@vkontakte/vk-mini-apps-router";
+import { useRouteNavigator } from "@vkontakte/vk-mini-apps-router";
 import { httpService } from "../services";
 import { useCookies } from "react-cookie";
 import { ErrorAlert } from "../components";
+import bridge from "@vkontakte/vk-bridge";
 
 export const LoginModal: FC = () => {
-  const userId = useParams<"used_id">();
   const { mutateAsync: login } = useMutation({
     mutationFn: (data: unknown) =>
       httpService().post("/auth/login", data),
@@ -25,8 +22,12 @@ export const LoginModal: FC = () => {
   };
 
   const handleSubmit = async () => {
+    const launchParams = await bridge.send(
+      "VKWebAppGetLaunchParams"
+    );
+
     const submitData = {
-      username: userId,
+      username: launchParams.vk_user_id,
       password: pinCode,
     };
 
