@@ -21,19 +21,19 @@ export const Tasks: FC = () => {
       align="stretch"
       style={{ rowGap: "12px", padding: "22px 24px" }}
     >
-      {isLoading ? (
-        <>
-          <Skeleton width="100%" height={84} borderRadius={8} />
-          <Skeleton width="100%" height={84} borderRadius={8} />
-          <Skeleton width="100%" height={84} borderRadius={8} />
-          <Skeleton width="100%" height={84} borderRadius={8} />
-          <Skeleton width="100%" height={84} borderRadius={8} />
-        </>
-      ) : (
-        tasks.map((task) => (
-          <TaskCard key={task.id} task={task} />
-        ))
-      )}
+      {/* {isLoading ? ( */}
+      <>
+        <Skeleton width="100%" height={84} borderRadius={8} />
+        <Skeleton width="100%" height={84} borderRadius={8} />
+        <Skeleton width="100%" height={84} borderRadius={8} />
+        <Skeleton width="100%" height={84} borderRadius={8} />
+        <Skeleton width="100%" height={84} borderRadius={8} />
+      </>
+      {/* // ) : ( */}
+      {/* //   tasks.map((task) => ( */}
+      {/* //     <TaskCard key={task.id} task={task} /> */}
+      {/* //   )) */}
+      {/* // )} */}
     </Flex>
   );
 };
