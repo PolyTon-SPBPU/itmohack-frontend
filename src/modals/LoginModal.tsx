@@ -28,7 +28,7 @@ export const LoginModal: FC<{ user: UserInfo }> = ({ user }) => {
     );
 
     const submitData = {
-      username: launchParams.vk_user_id,
+      username: launchParams.vk_user_id + "",
       password: pinCode,
     };
 
