@@ -8,6 +8,7 @@ import { useCookies } from "react-cookie";
 import { ErrorAlert } from "../components";
 import bridge from "@vkontakte/vk-bridge";
 import { UserInfo } from "@vkontakte/vk-bridge";
+import axios from "axios";
 
 export const LoginModal: FC<{ user: UserInfo }> = ({ user }) => {
   const [{ access_token }, setCookies] = useCookies([
@@ -19,7 +20,16 @@ export const LoginModal: FC<{ user: UserInfo }> = ({ user }) => {
       birthday: string;
       first_name: string;
       last_name: string;
-    }) => httpService(access_token).patch("/auth/user/me", data),
+    }) =>
+      axios.patch(
+        "https://polytones.online/api/auth/user/me",
+        data,
+        {
+          headers: {
+            Authorization: "Bearer " + access_token,
+          },
+        }
+      ),
   });
 
   const { mutateAsync: login } = useMutation({
@@ -49,10 +59,10 @@ export const LoginModal: FC<{ user: UserInfo }> = ({ user }) => {
 
     try {
       const { data } = await login(submitData);
-      setCookies("access_token", data.access_token);
+      setCookies("access_token", data.data.access_token);
       await patchUser({
         ...user,
-        access_token: data.access_token,
+        access_token: data.data.access_token,
         birthday: user.bdate,
       });
       navigator.hideModal();
