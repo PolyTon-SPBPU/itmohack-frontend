@@ -1,24 +1,21 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect } from "react";
 import QRCode from "react-qr-code";
 import {
   NavIdProps,
   Panel,
   PanelHeader,
   PanelHeaderBack,
-  PanelHeaderButton,
   Flex,
 } from "@vkontakte/vkui";
 import { Text } from "../ui";
-import { TaskT } from "../types";
 import { Currency } from "../ui/Currency";
 import {
   useSearchParams,
   useRouteNavigator,
 } from "@vkontakte/vk-mini-apps-router";
-import { Icon24Refresh } from "@vkontakte/icons";
 import { branchInfo } from "../types/tasks";
 import { useCookies } from "react-cookie";
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { httpService } from "../services/http.service";
 import { Button } from "@vkontakte/vkui";
 import { UserInfo } from "@vkontakte/vk-bridge";
@@ -28,7 +25,6 @@ export const Task: FC<NavIdProps & { user: UserInfo }> = ({
   user,
   id,
 }) => {
-  const [task, setTask] = useState<TaskT | undefined>(undefined);
   const navigator = useRouteNavigator();
   const [{ access_token }] = useCookies(["access_token"]);
   const [params] = useSearchParams();
@@ -44,16 +40,6 @@ export const Task: FC<NavIdProps & { user: UserInfo }> = ({
         `/task/${task_id}/user/${user.id}`
       ),
   });
-
-  const { data } = useQuery<TaskT>({
-    queryKey: ["task_i", task_id],
-    queryFn: async () =>
-      await httpService(access_token).get("/task/" + task_id),
-  });
-
-  useEffect(() => {
-    if (data) setTask(data);
-  }, [data]);
 
   const handleComplete = async () => {
     navigator.showPopout(
@@ -72,13 +58,6 @@ export const Task: FC<NavIdProps & { user: UserInfo }> = ({
           <PanelHeaderBack onClick={() => navigator.back()}>
             <Text size={15}>Назад</Text>
           </PanelHeaderBack>
-        }
-        after={
-          <PanelHeaderButton
-            onClick={() => navigator.replace("/task" + task_id)}
-          >
-            <Icon24Refresh />
-          </PanelHeaderButton>
         }
         title="Задача c QR-кодом"
       >
