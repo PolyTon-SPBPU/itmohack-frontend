@@ -21,7 +21,7 @@ export const Currency: FC<CurrencyPropsT> = ({
       direction="row"
       align="end"
       justify="start"
-      style={{ ...style, columnGap: "2px" }}
+      style={{ ...style, columnGap: "3px" }}
     >
       <Text {...props} size={size} color="primary" weight={800}>
         {children || 0}
@@ -30,10 +30,14 @@ export const Currency: FC<CurrencyPropsT> = ({
         <ITokenSVG
           width={size - 1}
           color="primary"
-          style={{ transform: "translateY(-1px)" }}
+          style={{ transform: `translateY(-${size / 1.5}px)` }}
         />
       ) : (
-        <XPTokenSVG width={size / 2} color="primary" />
+        <XPTokenSVG
+          width={size / 2}
+          color="primary"
+          style={{ transform: `translateY(-${size / 1.5}px)` }}
+        />
       )}
     </Flex>
   );

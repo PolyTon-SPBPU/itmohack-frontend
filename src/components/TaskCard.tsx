@@ -24,11 +24,15 @@ export const TaskCard: FC<TaskCardPropsT> = ({ task }) => {
         padding: "12px",
         paddingRight: "14px",
         cursor: "pointer",
+        position: "relative",
       }}
       onClick={handleClick}
     >
       <div
         style={{
+          position: "absolute",
+          right: "14px",
+          top: "14px",
           width: "10px",
           height: "10px",
           borderRadius: "100px",
@@ -55,7 +59,7 @@ export const TaskCard: FC<TaskCardPropsT> = ({ task }) => {
           justify="end"
           style={{ columnGap: "4px" }}
         >
-          <Icon width={12} color="black" />
+          <Icon width={14} color="black" />
           <Text size={12} weight={700}>
             {branchInfo[task.branch].title}
           </Text>

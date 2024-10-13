@@ -1,4 +1,4 @@
-import { FC, useEffect } from "react";
+import { FC, useEffect, useState } from "react";
 import QRCode from "react-qr-code";
 import {
   NavIdProps,
@@ -28,6 +28,7 @@ export const Task: FC<NavIdProps & { user: UserInfo }> = ({
   user,
   id,
 }) => {
+  const [task, setTask] = useState<TaskT | undefined>(undefined);
   const navigator = useRouteNavigator();
   const [{ access_token }] = useCookies(["access_token"]);
   const [params] = useSearchParams();
@@ -40,14 +41,15 @@ export const Task: FC<NavIdProps & { user: UserInfo }> = ({
       ),
   });
 
-  const { data: task } = useQuery<TaskT>({
+  const { data } = useQuery<TaskT>({
     queryKey: ["task_i", task_id],
-    queryFn: () =>
-      httpService(access_token).get("/task/" + task_id),
+    queryFn: async () =>
+      await httpService(access_token).get("/task/" + task_id),
   });
 
-  console.log("LOGGG: ", params, task_id);
-  console.log("LOGGG after: ", task);
+  useEffect(() => {
+    if (data) setTask(data);
+  }, [data]);
 
   const handleComplete = async () => {
     navigator.showPopout(
@@ -113,32 +115,39 @@ export const Task: FC<NavIdProps & { user: UserInfo }> = ({
             }}
           />
         </Flex>
-        <Flex
-          direction="column"
-          justify="center"
-          align="center"
-          style={{ rowGap: "8px" }}
+        <a
+          href={`https://polytones.online/ar/first/?access_token=${access_token}&task_id=${task_id}`}
+          style={{
+            display: "block",
+            width: "100%",
+            marginBottom: "8px",
+          }}
+          target="_blank"
         >
+          <Button size="m">Получить награду</Button>
+        </a>
+        {task_id === "3" && (
           <a
-            href="https://polytones.online/ar/second/"
+            href={`https://polytones.online/ar/second/?access_token=${access_token}&task_id=${task_id}`}
             style={{
               display: "block",
               width: "100%",
+              marginBottom: "8px",
             }}
             target="_blank"
           >
-            <Button size="m" style={{ margin: "0 auto" }}>
+            <Button size="m" mode="outline">
               Выполнить с помощью AR
             </Button>
           </a>
-          <Button
-            onClick={handleComplete}
-            mode="secondary"
-            size="m"
-          >
-            Я выполнил
-          </Button>
-        </Flex>
+        )}
+        <Button
+          onClick={handleComplete}
+          mode="secondary"
+          size="m"
+        >
+          Я выполнил
+        </Button>
       </div>
     </Panel>
   );

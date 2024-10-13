@@ -197,7 +197,7 @@ export const Profile: FC<NavIdProps> = ({ id }) => {
               />
             </>
           ) : !items.length ? (
-            <Text>Пока что ничего нет</Text>
+            <Text>Сезон еще не начался</Text>
           ) : (
             items
               .filter((item) => item.type === "border")
@@ -239,7 +239,7 @@ export const Profile: FC<NavIdProps> = ({ id }) => {
               />
             </>
           ) : !items.length ? (
-            <Text>Пока что ничего нет</Text>
+            <Text>Сезон еще не начался</Text>
           ) : (
             items
               .filter((item) => item.type === "merch")
