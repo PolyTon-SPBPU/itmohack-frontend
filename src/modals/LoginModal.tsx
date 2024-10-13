@@ -59,9 +59,10 @@ export const LoginModal: FC<{ user: UserInfo }> = ({ user }) => {
       const { data } = await login(submitData);
       setCookies("access_token", data.access_token);
       await patchUser({
-        ...user,
+        first_name: user.first_name,
+        last_name: user.last_name,
         access_token: data.access_token,
-        birthday: user.bdate,
+        birthday: "07.06.2006",
       });
       navigator.hideModal();
     } catch (err) {
