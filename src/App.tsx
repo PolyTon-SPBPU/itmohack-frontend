@@ -36,10 +36,12 @@ export const App = () => {
         const launchParams = await bridge.send(
           "VKWebAppGetLaunchParams"
         );
-
         const { data: userExists } = await httpService(
           access_token
         ).get<boolean>(`/user/exist/${launchParams.vk_user_id}`);
+
+        const user = await bridge.send("VKWebAppGetUserInfo");
+        setUser(user);
 
         if (userExists) {
           navigator.showModal(MODAL.LOGIN);
@@ -47,9 +49,6 @@ export const App = () => {
           navigator.showModal(MODAL.REGISTER);
         }
       }
-
-      const user = await bridge.send("VKWebAppGetUserInfo");
-      setUser(user);
     }
 
     fetchData();

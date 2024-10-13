@@ -41,7 +41,7 @@ export const Task: FC<NavIdProps & { user: UserInfo }> = ({
   });
 
   const { data: task } = useQuery<TaskT>({
-    queryKey: ["task"],
+    queryKey: ["task_i", task_id],
     queryFn: () =>
       httpService(access_token).get("/task/" + task_id),
   });
