@@ -30,9 +30,6 @@ export const App = () => {
 
   useEffect(() => {
     async function fetchData() {
-      const user = await bridge.send("VKWebAppGetUserInfo");
-      setUser(user);
-
       try {
         await httpService(access_token).get("/auth/user/me");
       } catch (err) {
@@ -50,6 +47,9 @@ export const App = () => {
           navigator.showModal(MODAL.REGISTER);
         }
       }
+
+      const user = await bridge.send("VKWebAppGetUserInfo");
+      setUser(user);
     }
 
     fetchData();
