@@ -78,10 +78,20 @@ export const Leaderboard: FC = () => {
               height={40}
               borderRadius={8}
             />
+            <Skeleton
+              width="100%"
+              height={40}
+              borderRadius={8}
+            />
+            <Skeleton
+              width="100%"
+              height={40}
+              borderRadius={8}
+            />
           </>
         ) : (
           users
-            .slice(0, 10)
+            .slice(0, 15)
             .map((user, index) => (
               <LeaderboardCard
                 key={user.id}
@@ -91,7 +101,7 @@ export const Leaderboard: FC = () => {
               />
             ))
         )}
-        <Text
+        {/* <Text
           weight={700}
           size={22}
           style={{
@@ -136,7 +146,7 @@ export const Leaderboard: FC = () => {
                 mine={user.id == vk?.id}
               />
             ))
-        )}
+        )} */}
       </Flex>
     </div>
   );

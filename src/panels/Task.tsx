@@ -26,7 +26,8 @@ export const Task: FC<NavIdProps> = ({ id }) => {
   const navigator = useRouteNavigator();
   const { data } = useQuery<TaskT>({
     queryKey: ["task"],
-    queryFn: () => httpService(access_token).get("/task"),
+    queryFn: () =>
+      httpService(access_token).get("/task/" + task_id),
   });
 
   const task = (data || {}) as TaskT;
@@ -56,7 +57,7 @@ export const Task: FC<NavIdProps> = ({ id }) => {
           style={{ columnGap: "8px", marginBottom: "12px" }}
         >
           <Text size={20} weight={600}>
-            {branchInfo[task.branch].title}
+            {branchInfo[task.branch]?.title}
           </Text>
           <Currency size={20}>+{task.price_tokens}</Currency>
         </Flex>

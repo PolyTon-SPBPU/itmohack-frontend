@@ -46,7 +46,7 @@ export const Profile: FC<NavIdProps> = ({ id }) => {
     () =>
       data?.data.map((item) => ({
         ...item,
-        type: (item.name.includes("r")
+        type: (item.name.toLowerCase().includes("рамка")
           ? "border"
           : "merch") as ItemCategoryT,
       })) || [],

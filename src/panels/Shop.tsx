@@ -19,7 +19,7 @@ export const Shop: FC = () => {
     () =>
       data?.data.map((item) => ({
         ...item,
-        type: (item.name.includes("r")
+        type: (item.name.toLowerCase().includes("рамка")
           ? "border"
           : "merch") as ItemCategoryT,
       })) || [],

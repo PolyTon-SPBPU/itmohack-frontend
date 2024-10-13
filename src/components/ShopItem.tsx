@@ -28,6 +28,8 @@ const imgs = [
   "/items/merch-13.png",
   "/items/merch-14.png",
   "/items/merch-15.png",
+];
+const borderImgs = [
   "/items/border-1.png",
   "/items/border-2.png",
   "/items/border-3.png",
@@ -45,7 +47,10 @@ export const ShopItem: FC<ShopItemPropsT> = ({ item }) => {
   });
   const user = (userData || {}) as UserT;
   const percent = (user?.tokens || 0) / item.price;
-  const imgSrc = imgs[item.id % imgs.length];
+  const imgSrc =
+    item.type === "border"
+      ? borderImgs[item.id % 5]
+      : imgs[item.id % imgs.length];
 
   const screenWidth = useGetScreenWidth();
   const cardSize = screenWidth
