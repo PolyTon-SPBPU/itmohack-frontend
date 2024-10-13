@@ -10,14 +10,14 @@ import { ItemCategoryT } from "../types/shop";
 
 export const Shop: FC = () => {
   const [{ access_token }] = useCookies(["access_token"]);
-  const { data, isLoading } = useQuery<ShopItemT[]>({
+  const { data, isLoading } = useQuery<{ data: ShopItemT[] }>({
     queryKey: ["shop-items"],
     queryFn: () => httpService(access_token).get("/item"),
   });
 
   const items = useMemo(
     () =>
-      data?.map((item) => ({
+      data.data?.map((item) => ({
         ...item,
         type: (item.name.includes("r")
           ? "border"
