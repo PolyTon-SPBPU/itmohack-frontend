@@ -12,7 +12,11 @@ import { UserInfo } from "@vkontakte/vk-bridge";
 export const LoginModal: FC<{ user: UserInfo }> = ({ user }) => {
   const { mutateAsync: login } = useMutation({
     mutationFn: (data: unknown) =>
-      httpService().post("/auth/login", data),
+      httpService().post("/auth/login", data, {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      }),
   });
   const [cookies, setCookies] = useCookies(["access_token"]);
   const [pinCode, setPinCode] = useState<string>("");
