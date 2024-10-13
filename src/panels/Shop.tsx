@@ -41,6 +41,7 @@ export const Shop: FC = () => {
         align="start"
         style={{
           columnGap: "12px",
+          rowGap: "12px",
           marginBottom: "20px",
           height: "auto",
         }}
@@ -78,6 +79,8 @@ export const Shop: FC = () => {
               borderRadius={8}
             />
           </>
+        ) : !items.length ? (
+          <Text>Пока что ничего нет</Text>
         ) : (
           items
             .filter((item) => item.type === "border")
@@ -128,6 +131,8 @@ export const Shop: FC = () => {
               borderRadius={8}
             />
           </>
+        ) : !items.length ? (
+          <Text>Пока что ничего нет</Text>
         ) : (
           items
             .filter((item) => item.type === "merch")

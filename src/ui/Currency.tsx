@@ -22,15 +22,23 @@ export const Currency: FC<CurrencyPropsT> = ({
       style={{ ...style, columnGap: "2px" }}
     >
       <Text {...props} size={size} color="primary" weight={800}>
-        {children}
+        {children || 0}
       </Text>
-      {type === "normal" && (
+      {type === "normal" ? (
         <img
-          src="/i-token.png"
+          src="/i-token.svg"
           alt="И"
-          height={size}
-          width={size * 0.72}
+          height={size * 0.9}
+          width={size * 0.9 * 0.72}
           style={{ transform: `translateY(-1px)` }}
+        />
+      ) : (
+        <img
+          src="/xp.svg"
+          alt="xp"
+          height={size * 1.2 * 0.68}
+          width={size * 1.2}
+          style={{ transform: `translateY(2px)` }}
         />
       )}
     </Flex>

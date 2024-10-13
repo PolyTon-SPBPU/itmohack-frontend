@@ -30,7 +30,6 @@ export const App = () => {
     async function fetchData() {
       try {
         await httpService(access_token).get("/auth/user/me");
-        return;
       } catch (err) {
         const launchParams = await bridge.send(
           "VKWebAppGetLaunchParams"
@@ -39,6 +38,8 @@ export const App = () => {
         const userExists = await httpService(
           access_token
         ).get<boolean>(`/user/exist/${launchParams.vk_user_id}`);
+
+        console.log(userExists);
 
         if (userExists) {
           navigator.push(`/${MODAL.LOGIN}`, {

@@ -3,21 +3,20 @@ import {
   Panel,
   NavIdProps,
   Flex,
-  Button,
   PanelHeader,
   PanelHeaderBack,
 } from "@vkontakte/vkui";
 import { UserInfo } from "@vkontakte/vk-bridge";
 import { Text, Currency } from "../ui";
 import { useRouteNavigator } from "@vkontakte/vk-mini-apps-router";
-import { ShopItemT } from "../types";
+import { ShopItemT, UserT } from "../types";
 import { ProfileItem } from "../components/ProfileItem";
 import { useCookies } from "react-cookie";
 import { useQuery } from "@tanstack/react-query";
-import { UserT } from "../types/users";
 import { httpService } from "../services/http.service";
 import bridge from "@vkontakte/vk-bridge";
 import { ItemCategoryT } from "../types/shop";
+import { Skeleton, Avatar } from "@vkontakte/vkui";
 
 export const Profile: FC<NavIdProps> = ({ id }) => {
   const navigator = useRouteNavigator();
@@ -36,7 +35,9 @@ export const Profile: FC<NavIdProps> = ({ id }) => {
   });
   const vk = (vkData || {}) as UserInfo;
 
-  const { data } = useQuery<ShopItemT[]>({
+  const { data, isLoading: isItemsLoading } = useQuery<
+    ShopItemT[]
+  >({
     queryKey: ["my-items"],
     queryFn: () => httpService(access_token).get("/item/my"),
   });
@@ -82,14 +83,12 @@ export const Profile: FC<NavIdProps> = ({ id }) => {
           direction="row"
           noWrap
           justify="start"
-          style={{ columnGap: "10px", marginBottom: "14px" }}
+          style={{ columnGap: "12px", marginBottom: "16px" }}
         >
-          <img
+          <Avatar
+            size={120}
             src={vk.photo_200}
-            alt="Изображение не найдено"
             style={{
-              width: "120px",
-              height: "120px",
               borderRadius: "12px",
             }}
           />
@@ -108,7 +107,9 @@ export const Profile: FC<NavIdProps> = ({ id }) => {
               <Text size={15} weight={700}>
                 Искусство и культура
               </Text>
-              <Currency size={15}>{user.art}</Currency>
+              <Currency type="points" size={15}>
+                {user.art}
+              </Currency>
             </Flex>
             <Flex
               direction="row"
@@ -119,7 +120,9 @@ export const Profile: FC<NavIdProps> = ({ id }) => {
               <Text size={15} weight={700}>
                 Киберспорт
               </Text>
-              <Currency size={15}>{user.game}</Currency>
+              <Currency type="points" size={15}>
+                {user.game}
+              </Currency>
             </Flex>
             <Flex
               direction="row"
@@ -130,7 +133,9 @@ export const Profile: FC<NavIdProps> = ({ id }) => {
               <Text size={15} weight={700}>
                 Программирование
               </Text>
-              <Currency size={15}>{user.it}</Currency>
+              <Currency type="points" size={15}>
+                {user.it}
+              </Currency>
             </Flex>
             <Flex
               direction="row"
@@ -141,7 +146,9 @@ export const Profile: FC<NavIdProps> = ({ id }) => {
               <Text size={15} weight={700}>
                 Точные и реальные науки
               </Text>
-              <Currency size={15}>{user.science}</Currency>
+              <Currency type="points" size={15}>
+                {user.science}
+              </Currency>
             </Flex>
             <Flex
               direction="row"
@@ -152,18 +159,11 @@ export const Profile: FC<NavIdProps> = ({ id }) => {
               <Text size={15} weight={700}>
                 Спорт
               </Text>
-              <Currency size={15}>{user.sport}</Currency>
+              <Currency type="points" size={15}>
+                {user.sport}
+              </Currency>
             </Flex>
           </Flex>
-        </Flex>
-        <Flex
-          direction="row"
-          justify="start"
-          align="center"
-          style={{ columnGap: "8px", marginBottom: "14px" }}
-        >
-          <Button mode="primary">Рейтинг</Button>
-          <Button mode="secondary">Поделиться</Button>
         </Flex>
         <Text size={16} weight={600} mb={10}>
           Рамки:
@@ -174,11 +174,38 @@ export const Profile: FC<NavIdProps> = ({ id }) => {
           align="start"
           style={{ columnGap: "12px", marginBottom: "20px" }}
         >
-          {items
-            .filter((item) => item.type === "border")
-            .map((item) => (
-              <ProfileItem key={item.id} item={item} />
-            ))}
+          {isItemsLoading ? (
+            <>
+              <Skeleton
+                width="22%"
+                height={100}
+                borderRadius={8}
+              />
+              <Skeleton
+                width="22%"
+                height={100}
+                borderRadius={8}
+              />
+              <Skeleton
+                width="22%"
+                height={100}
+                borderRadius={8}
+              />
+              <Skeleton
+                width="22%"
+                height={100}
+                borderRadius={8}
+              />
+            </>
+          ) : !items.length ? (
+            <Text>Пока что ничего нет</Text>
+          ) : (
+            items
+              .filter((item) => item.type === "border")
+              .map((item) => (
+                <ProfileItem key={item.id} item={item} />
+              ))
+          )}
         </Flex>
         <Text size={16} weight={600} mb={10}>
           Мерч:
@@ -189,11 +216,38 @@ export const Profile: FC<NavIdProps> = ({ id }) => {
           align="start"
           style={{ columnGap: "12px" }}
         >
-          {items
-            .filter((item) => item.type === "merch")
-            .map((item) => (
-              <ProfileItem key={item.id} item={item} />
-            ))}
+          {isItemsLoading ? (
+            <>
+              <Skeleton
+                width="22%"
+                height={100}
+                borderRadius={8}
+              />
+              <Skeleton
+                width="22%"
+                height={100}
+                borderRadius={8}
+              />
+              <Skeleton
+                width="22%"
+                height={100}
+                borderRadius={8}
+              />
+              <Skeleton
+                width="22%"
+                height={100}
+                borderRadius={8}
+              />
+            </>
+          ) : !items.length ? (
+            <Text>Пока что ничего нет</Text>
+          ) : (
+            items
+              .filter((item) => item.type === "merch")
+              .map((item) => (
+                <ProfileItem key={item.id} item={item} />
+              ))
+          )}
         </Flex>
       </div>
     </Panel>

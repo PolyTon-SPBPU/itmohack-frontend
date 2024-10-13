@@ -27,7 +27,7 @@ export const PanelTabs: FC<PanelTabsPropsT> = ({
   setSelected,
 }) => {
   return (
-    <Tabs>
+    <Tabs layoutFillMode="stretched">
       {tabs.map((tab) => (
         <TabsItem
           key={tab.name}
