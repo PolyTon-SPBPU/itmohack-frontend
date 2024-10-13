@@ -14,31 +14,6 @@ type ShopItemPropsT = {
   item: ShopItemT;
 };
 
-const imgs = [
-  "/items/merch-1.png",
-  "/items/merch-2.png",
-  "/items/merch-3.png",
-  "/items/merch-4.png",
-  "/items/merch-5.png",
-  "/items/merch-6.png",
-  "/items/merch-7.png",
-  "/items/merch-8.png",
-  "/items/merch-9.png",
-  "/items/merch-10.png",
-  "/items/merch-11.png",
-  "/items/merch-12.png",
-  "/items/merch-13.png",
-  "/items/merch-14.png",
-  "/items/merch-15.png",
-];
-const borderImgs = [
-  "/items/border-1.png",
-  "/items/border-2.png",
-  "/items/border-3.png",
-  "/items/border-4.png",
-  "/items/border-5.png",
-];
-
 export const ShopItem: FC<ShopItemPropsT> = ({ item }) => {
   const navigator = useRouteNavigator();
   const [{ access_token }] = useCookies(["access_token"]);
@@ -52,8 +27,8 @@ export const ShopItem: FC<ShopItemPropsT> = ({ item }) => {
   const percent = (user?.tokens || 0) / item.price;
   const imgSrc =
     item.type === "border"
-      ? borderImgs[item.id % 5]
-      : imgs[item.id % imgs.length];
+      ? `/items/border-${item.id % 4}.png`
+      : `/items/merch-${item.id % 10}.png`;
 
   const screenWidth = useGetScreenWidth();
   const cardSize = screenWidth
