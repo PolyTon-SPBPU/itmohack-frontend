@@ -7,4 +7,5 @@ export type SystemColorT =
 export type SVGPropsT = {
   width: number;
   color: SystemColorT
+  style?: React.CSSProperties
 }

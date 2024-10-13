@@ -1,6 +1,8 @@
 import { FC, CSSProperties } from "react";
 import { Flex } from "@vkontakte/vkui";
 import { Text, TextPropsT } from "./Text";
+import { XPTokenSVG } from "./XPTokenSVG";
+import { ITokenSVG } from "./ITokenSVG";
 
 type CurrencyPropsT = {
   type?: "normal" | "points";
@@ -25,21 +27,13 @@ export const Currency: FC<CurrencyPropsT> = ({
         {children || 0}
       </Text>
       {type === "normal" ? (
-        <img
-          src="/i-token.svg"
-          alt="И"
-          height={size * 0.9}
-          width={size * 0.9 * 0.72}
-          style={{ transform: `translateY(-0.5px)` }}
+        <ITokenSVG
+          width={size - 1}
+          color="primary"
+          style={{ transform: "translateY(-1px)" }}
         />
       ) : (
-        <img
-          src="/xp.svg"
-          alt="xp"
-          height={size * 1.2 * 0.68}
-          width={size * 1.2}
-          style={{ transform: `translateY(2px)` }}
-        />
+        <XPTokenSVG width={size - 2} color="primary" />
       )}
     </Flex>
   );

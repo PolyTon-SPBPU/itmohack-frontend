@@ -8,6 +8,7 @@ import { useCookies } from "react-cookie";
 import { httpService } from "../services/http.service";
 import { UserT } from "../types";
 import bridge, { UserInfo } from "@vkontakte/vk-bridge";
+import { ITokenSVG } from "../ui/ITokenSVG";
 
 export const ProfilePreview: FC = () => {
   const navigator = useRouteNavigator();
@@ -70,13 +71,7 @@ export const ProfilePreview: FC = () => {
         style={{ marginLeft: "auto" }}
         // onClick={handleDonate}
       >
-        <img
-          src="/i-token.png"
-          alt="И"
-          height={24}
-          width={17.3}
-          style={{ transform: `translateY(-1px)` }}
-        />
+        <ITokenSVG width={24} color="primary" />
       </Avatar>
     </Flex>
   );

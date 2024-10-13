@@ -42,13 +42,11 @@ export const Task: FC<NavIdProps & { user: UserInfo }> = ({
   });
 
   const navigator = useRouteNavigator();
-  const { data } = useQuery<TaskT>({
+  const { data: task } = useQuery<TaskT>({
     queryKey: ["task"],
     queryFn: () =>
       httpService(access_token).get("/task/" + task_id),
   });
-
-  const task = useMemo(() => data || {}, [data]) as TaskT;
 
   const handleCheck = async () => {
     const { data: tasks } = await getTasks();
@@ -84,7 +82,7 @@ export const Task: FC<NavIdProps & { user: UserInfo }> = ({
       </PanelHeader>
       <div style={{ padding: "22px 24px" }}>
         <Text size={24} weight={600} mb={10}>
-          {task.title}
+          {task?.title}
         </Text>
         <Flex
           direction="row"
@@ -93,14 +91,14 @@ export const Task: FC<NavIdProps & { user: UserInfo }> = ({
           style={{ columnGap: "8px", marginBottom: "12px" }}
         >
           <Text size={20} weight={600}>
-            {branchInfo[task.branch]?.title}
+            {branchInfo[task?.branch]?.title}
           </Text>
           <Currency size={20}>
-            +{task.price_tokens || 0}
+            +{task?.price_tokens || 0}
           </Currency>
         </Flex>
         <Text size={16} mb={22}>
-          {task.text}
+          {task?.text}
         </Text>
         <Flex justify="center">
           <QRCode
@@ -122,19 +120,15 @@ export const Task: FC<NavIdProps & { user: UserInfo }> = ({
           style={{ rowGap: "8px" }}
         >
           <a
-            href={`https://polytones.online/ar/first/?access_token=${
-              access_token ||
-              localStorage.getItem("access_token")
-            }&task_id=${Number(task_id)}`}
+            href="https://polytones.online/ar/second/"
             style={{
-              marginBottom: "8px",
               display: "block",
               width: "100%",
             }}
             target="_blank"
           >
-            <Button size="m">
-              Нажми, чтобы получить награду
+            <Button size="m" style={{ margin: "0 auto" }}>
+              Выполнить с помощью AR
             </Button>
           </a>
           <Button
@@ -142,7 +136,7 @@ export const Task: FC<NavIdProps & { user: UserInfo }> = ({
             mode="secondary"
             size="m"
           >
-            Проверить выполнение
+            Я выполнил
           </Button>
         </Flex>
       </div>

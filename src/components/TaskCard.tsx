@@ -25,7 +25,7 @@ export const TaskCard: FC<TaskCardPropsT> = ({ task }) => {
       }}
       onClick={handleClick}
     >
-      <Text size={14} weight={500} mb={4}>
+      <Text size={14} weight={600} mb={4}>
         {task.title}
       </Text>
       <Text size={12} mb={6}>

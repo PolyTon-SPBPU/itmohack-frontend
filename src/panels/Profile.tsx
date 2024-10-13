@@ -251,8 +251,12 @@ export const Profile: FC<NavIdProps> = ({ id }) => {
         </Flex>
       </div>
       <Text
-        size={12}
-        style={{ marginTop: "auto", textAlign: "center" }}
+        size={14}
+        style={{
+          marginTop: "auto",
+          textAlign: "center",
+          marginBottom: "16px",
+        }}
       >
         Возникли проблемы? Пишите нам! <br />
         polytoneteam@gmail.com
