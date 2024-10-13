@@ -52,7 +52,7 @@ export const LoginModal: FC<{ user: UserInfo }> = ({ user }) => {
       setCookies("access_token", data.access_token);
       await patchUser({
         ...user,
-        access_token,
+        access_token: data.access_token,
         birthday: user.bdate,
       });
       navigator.hideModal();
