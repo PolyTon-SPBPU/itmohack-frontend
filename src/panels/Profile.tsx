@@ -35,16 +35,16 @@ export const Profile: FC<NavIdProps> = ({ id }) => {
   });
   const vk = (vkData || {}) as UserInfo;
 
-  const { data, isLoading: isItemsLoading } = useQuery<
-    ShopItemT[]
-  >({
+  const { data, isLoading: isItemsLoading } = useQuery<{
+    data: ShopItemT[];
+  }>({
     queryKey: ["my-items"],
     queryFn: () => httpService(access_token).get("/item/my"),
   });
 
   const items = useMemo(
     () =>
-      data?.map((item) => ({
+      data?.data.map((item) => ({
         ...item,
         type: (item.name.includes("r")
           ? "border"

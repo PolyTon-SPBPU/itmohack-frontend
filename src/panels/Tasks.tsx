@@ -14,7 +14,7 @@ export const Tasks: FC = () => {
   });
 
   console.log(data);
-  const tasks = useMemo(() => data.data || [], [data]);
+  const tasks = useMemo(() => data?.data || [], [data]);
 
   return (
     <Flex

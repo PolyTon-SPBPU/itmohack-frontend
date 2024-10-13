@@ -11,11 +11,11 @@ import { UserInfo } from "@vkontakte/vk-bridge";
 
 export const Leaderboard: FC = () => {
   const [{ access_token }] = useCookies(["access_token"]);
-  const { data, isLoading } = useQuery<UserT[]>({
+  const { data, isLoading } = useQuery<{ data: UserT[] }>({
     queryKey: ["users"],
     queryFn: () => httpService(access_token).get("/user"),
   });
-  const users = useMemo(() => data || [], [data]);
+  const users = useMemo(() => data?.data || [], [data]);
 
   const { data: vkData } = useQuery({
     queryKey: ["vk-user"],

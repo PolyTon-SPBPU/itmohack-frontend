@@ -17,7 +17,7 @@ export const Shop: FC = () => {
 
   const items = useMemo(
     () =>
-      data.data.map((item) => ({
+      data?.data.map((item) => ({
         ...item,
         type: (item.name.includes("r")
           ? "border"
