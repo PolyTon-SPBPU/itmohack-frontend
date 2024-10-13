@@ -5,7 +5,7 @@ export const httpService = (token?: string) => {
     baseURL: "https://polytones.online/api/",
     headers: {
       ...(token ? { Authorization: 'Bearer ' + token } : {}),
-      'Content-Type': 'application/x-www-form-urlencoded'
+      'Content-Type': 'application/json'
     }
   })
 
