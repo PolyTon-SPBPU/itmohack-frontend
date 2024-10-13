@@ -10,12 +10,15 @@ import bridge from "@vkontakte/vk-bridge";
 import { UserInfo } from "@vkontakte/vk-bridge";
 
 export const LoginModal: FC<{ user: UserInfo }> = ({ user }) => {
+  const [{ access_token }, setCookies] = useCookies([
+    "access_token",
+  ]);
   const { mutateAsync: patchUser } = useMutation({
     mutationFn: (data: {
       birthday: string;
       first_name: string;
       last_name: string;
-    }) => httpService().patch("/auth/user/me", data),
+    }) => httpService(access_token).patch("/auth/user/me", data),
   });
 
   const { mutateAsync: login } = useMutation({
@@ -26,7 +29,6 @@ export const LoginModal: FC<{ user: UserInfo }> = ({ user }) => {
         },
       }),
   });
-  const [cookies, setCookies] = useCookies(["access_token"]);
   const [pinCode, setPinCode] = useState<string>("");
   const navigator = useRouteNavigator();
 
