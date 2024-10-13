@@ -44,16 +44,16 @@ export const AppConfig = () => {
   );
 
   return (
-    <CookiesProvider>
-      <QueryClientProvider client={queryClient}>
-        <ConfigProvider
-          appearance={vkBridgeAppearance}
-          platform={
-            vk_platform === "desktop_web" ? "vkcom" : undefined
-          }
-          isWebView={vkBridge.isWebView()}
-          hasCustomPanelHeaderAfter={true}
-        >
+    <ConfigProvider
+      appearance={vkBridgeAppearance}
+      platform={
+        vk_platform === "desktop_web" ? "vkcom" : undefined
+      }
+      isWebView={vkBridge.isWebView()}
+      hasCustomPanelHeaderAfter={true}
+    >
+      <CookiesProvider>
+        <QueryClientProvider client={queryClient}>
           <AdaptivityProvider {...adaptivity}>
             <AppRoot mode="full" safeAreaInsets={vkBridgeInsets}>
               <RouterProvider router={router}>
@@ -61,8 +61,8 @@ export const AppConfig = () => {
               </RouterProvider>
             </AppRoot>
           </AdaptivityProvider>
-        </ConfigProvider>
-      </QueryClientProvider>
-    </CookiesProvider>
+        </QueryClientProvider>
+      </CookiesProvider>
+    </ConfigProvider>
   );
 };

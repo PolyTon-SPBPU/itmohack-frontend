@@ -26,26 +26,26 @@ export const App = () => {
 
   useEffect(() => {
     async function fetchData() {
-      try {
-        await httpService(access_token).get("/auth/user/me");
-        return;
-      } catch (err) {
-        const launchParams = await bridge.send(
-          "VKWebAppGetLaunchParams"
-        );
+      // try {
+      //   await httpService(access_token).get("/auth/user/me");
+      //   return;
+      // } catch (err) {
+      //   const launchParams = await bridge.send(
+      //     "VKWebAppGetLaunchParams"
+      //   );
 
-        const userExists = await httpService(
-          access_token
-        ).get<boolean>(`/user/exist/${launchParams.vk_user_id}`);
+      //   const userExists = await httpService(
+      //     access_token
+      //   ).get<boolean>(`/user/exist/${launchParams.vk_user_id}`);
 
-        if (userExists) {
-          navigator.push(`/${MODAL.LOGIN}`, {
-            user_id: launchParams.vk_user_id + "",
-          });
-        } else {
-          navigator.showModal(MODAL.REGISTER);
-        }
-      }
+      //   if (userExists) {
+      //     navigator.push(`/${MODAL.LOGIN}`, {
+      //       user_id: launchParams.vk_user_id + "",
+      //     });
+      //   } else {
+      //     navigator.showModal(MODAL.REGISTER);
+      //   }
+      // }
     }
 
     fetchData();
